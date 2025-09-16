@@ -1,15 +1,15 @@
 {
   "name": "task_3",
   "version": "1.0.0",
-  "main": "webpack.config.js",
+  "main": "index.js",
+  "description": "Holberton Webpack Task 3",
   "scripts": {
     "build": "webpack",
-    "start-dev": "webpack serve --open"
+    "start-dev": "webpack serve --open --port 8564"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "jquery": "^3.7.1",
     "lodash": "^4.17.21"
