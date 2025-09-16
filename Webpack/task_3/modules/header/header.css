@@ -1,0 +1,8 @@
+#logo {
+  width: 200px;
+  height: 200px;
+  background: gray; /* remplacer par une image si nécessaire */
+}
+h1 {
+  font-size: 24px;
+}
