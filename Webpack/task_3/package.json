@@ -5,7 +5,7 @@
   "description": "Holberton Webpack Task 3",
   "scripts": {
     "build": "webpack",
-    "start-dev": "webpack serve --open --port 8564"
+    "start-dev": "webpack-dev-server --open --port 8564"
   },
   "keywords": [],
   "author": "",
