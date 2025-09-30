@@ -1,6 +1,10 @@
 // Test runner for task_3 sequence 3
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 try {
   // Check if the required files exist
@@ -11,43 +15,34 @@ try {
     'src/Notifications.spec.js'
   ];
 
-  let allFilesExist = true;
   for (const file of requiredFiles) {
     if (!fs.existsSync(path.join(__dirname, file))) {
-      allFilesExist = false;
-      break;
+      console.log('NOK');
+      process.exit(0);
     }
   }
 
-  if (!allFilesExist) {
+  // Check utils.js
+  const utilsContent = fs.readFileSync(path.join(__dirname, 'src/utils.js'), 'utf8');
+  if (
+    !/getCurrentYear/.test(utilsContent) ||
+    !/getFooterCopy/.test(utilsContent) ||
+    !/getLatestNotification/.test(utilsContent)
+  ) {
     console.log('NOK');
-    return;
+    process.exit(0);
   }
 
-  // Check if utils functions exist
-  const utilsPath = path.join(__dirname, 'src/utils.js');
-  const utilsContent = fs.readFileSync(utilsPath, 'utf8');
+  // Check Notifications.jsx
+  const notifContent = fs.readFileSync(path.join(__dirname, 'src/Notifications.jsx'), 'utf8');
 
-  const hasGetCurrentYear = utilsContent.includes('getCurrentYear');
-  const hasGetFooterCopy = utilsContent.includes('getFooterCopy');
-  const hasGetLatestNotification = utilsContent.includes('getLatestNotification');
-
-  if (!hasGetCurrentYear || !hasGetFooterCopy || !hasGetLatestNotification) {
+  if (
+    !/aria-label\s*=\s*["']Close["']/.test(notifContent) ||  // plus flexible
+    !/<li[^>]*>/.test(notifContent) ||
+    !/dangerouslySetInnerHTML/.test(notifContent)
+  ) {
     console.log('NOK');
-    return;
-  }
-
-  // Check if Notifications component has required elements
-  const notificationsPath = path.join(__dirname, 'src/Notifications.jsx');
-  const notificationsContent = fs.readFileSync(notificationsPath, 'utf8');
-
-  const hasCloseButton = notificationsContent.includes('aria-label="Close"');
-  const hasListItems = notificationsContent.includes('<li');
-  const hasDangerouslySetInnerHTML = notificationsContent.includes('dangerouslySetInnerHTML');
-
-  if (!hasCloseButton || !hasListItems || !hasDangerouslySetInnerHTML) {
-    console.log('NOK');
-    return;
+    process.exit(0);
   }
 
   // All checks passed
