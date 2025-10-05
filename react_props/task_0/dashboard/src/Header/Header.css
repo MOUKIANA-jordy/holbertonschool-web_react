@@ -1,16 +1,12 @@
 .App-header {
+  background-color: #fff;
+  border-bottom: 3px solid #e01d3f;
   display: flex;
   align-items: center;
-  border-bottom: 3px solid #e1003c;
-  padding: 1rem;
+  color: #e01d3f;
 }
 
-.App-header img {
+.App-logo {
   height: 200px;
-}
-
-.App-header h1 {
-  color: #e1003c;
-  font-size: 2rem;
-  margin-left: 1rem;
+  width: 200px;
 }
