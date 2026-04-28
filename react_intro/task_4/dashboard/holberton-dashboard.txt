@@ -1,4 +1,4 @@
-GitHub Pages URL: https://Scandere78.github.io/holbertonschool-web_react/
+GitHub Pages URL: https://MOUKIANA-jordy.github.io/holbertonschool-web_react/
 To deploy:
 1. Install gh-pages: npm install --save-dev gh-pages
 2. Add deploy script to package.json: "deploy": "gh-pages -d dist"
