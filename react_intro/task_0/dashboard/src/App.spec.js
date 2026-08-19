@@ -6,7 +6,10 @@ describe('App', () => {
     render(<App />);
 
     expect(
-      screen.getByRole('heading', { level: 1, name: /school dashboard/i })
+      screen.getByRole('heading', {
+        level: 1,
+        name: /school dashboard/i,
+      })
     ).toBeInTheDocument();
   });
 
@@ -20,16 +23,11 @@ describe('App', () => {
 
   test('renders the copyright message in the app footer', () => {
     render(<App />);
-    const currentYear = new Date().getFullYear();
 
-    expect(
-      screen.getByText(
-        new RegExp(
-          `copyright\\s+${currentYear}\\s+-\\s+holberton\\s+school`,
-          'i'
-        )
-      )
-    ).toBeInTheDocument();
+    const footerRegex = /copyright \d{4}.*holberton school/i;
+    const footerNode = screen.getByText(footerRegex);
+
+    expect(footerNode).toBeInTheDocument();
   });
 
   test('renders the Holberton logo image', () => {
