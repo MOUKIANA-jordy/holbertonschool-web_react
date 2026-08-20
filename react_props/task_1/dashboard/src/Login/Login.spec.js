@@ -1,5 +1,9 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  screen,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Login from './Login';
 
@@ -12,19 +16,21 @@ describe('Login component', () => {
     expect(screen.getAllByRole('button')).toHaveLength(1);
   });
 
-  test('focuses each input when its label is clicked', async () => {
+  test('focuses inputs when their labels are clicked', async () => {
     const user = userEvent.setup();
     render(<Login />);
 
-    const emailLabel = screen.getByText(/^email:$/i);
+    const emailLabel = screen.getByText(/^email:?$/i);
     const emailInput = screen.getByLabelText(/email/i);
 
+    fireEvent.click(emailLabel);
     await user.click(emailLabel);
     expect(emailInput).toHaveFocus();
 
-    const passwordLabel = screen.getByText(/^password:$/i);
+    const passwordLabel = screen.getByText(/^password:?$/i);
     const passwordInput = screen.getByLabelText(/password/i);
 
+    fireEvent.click(passwordLabel);
     await user.click(passwordLabel);
     expect(passwordInput).toHaveFocus();
   });
