@@ -1,41 +1,82 @@
-import React from "react";
-import { render, screen, fireEvent, within, cleanup } from "@testing-library/react";
-import Notifications from "./Notifications";
+import React from 'react';
+import { render, screen, fireEvent } from '@testing-library/react';
+import Notifications from './Notifications';
 
-// Mocks CSS & assets pour Jest
-jest.mock("./assets/close-button.png", () => "close-icon.png");
-jest.mock("./Notifications.css", () => ({}), { virtual: true });
-
-afterEach(() => {
-  cleanup();
-  jest.restoreAllMocks();
-});
-
-describe("Notifications component (Task 7)", () => {
-  test("renders the notifications title (case-insensitive)", () => {
+describe('Notifications component tests', () => {
+  test('checks the existence of the notifications title "Here is the list of notifications"', () => {
     render(<Notifications />);
-    expect(screen.getByText(/here is the list of notifications/i)).toBeInTheDocument();
+
+    // Use case-insensitive regex to find the title
+    const titleElement = screen.getByText(/here is the list of notifications/i);
+    expect(titleElement).toBeInTheDocument();
   });
 
-  test("contains a Close button inside the notifications container", () => {
-    const { container } = render(<Notifications />);
-    const panel = container.querySelector(".Notifications");
-    expect(panel).toBeTruthy();
-    const closeBtn = screen.getByRole("button", { name: /close/i });
-    expect(within(panel).getByRole("button", { name: /close/i })).toBe(closeBtn);
+  test('checks the existence of the button element in the notifications', () => {
+    render(<Notifications />);
+
+    // Check for button element with Close aria-label
+    const buttonElement = screen.getByRole('button', { name: /close/i });
+    expect(buttonElement).toBeInTheDocument();
+
+    // Also check by aria-label directly
+    const buttonByAriaLabel = screen.getByLabelText(/close/i);
+    expect(buttonByAriaLabel).toBeInTheDocument();
   });
 
-  test("renders exactly 3 list items as notifications", () => {
+  test('verifies that there are 3 li elements as notifications rendered', () => {
     render(<Notifications />);
-    expect(screen.getAllByRole("listitem")).toHaveLength(3);
+
+    // Get all list items
+    const listItems = screen.getAllByRole('listitem');
+    expect(listItems).toHaveLength(3);
+
+    // Verify the content of each list item (case-insensitive)
+    expect(screen.getByText(/new course available/i)).toBeInTheDocument();
+    expect(screen.getByText(/new resume available/i)).toBeInTheDocument();
+
+    // Check for the urgent requirement notification (contains HTML)
+    const urgentItem = screen.getByText(/urgent requirement/i);
+    expect(urgentItem).toBeInTheDocument();
   });
 
-  // Test requis par seq1/seq3 : vérifie le log exact (case-insensitive)
-  test("clicking the Close button logs the expected message", () => {
-    const spy = jest.spyOn(console, "log").mockImplementation(() => {});
+  test('checks whether clicking the close button logs "Close button has been clicked" to the console', () => {
+    // Mock console.log
+    const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
+
     render(<Notifications />);
-    fireEvent.click(screen.getByRole("button", { name: /close/i }));
-    expect(spy).toHaveBeenCalledWith(expect.stringMatching(/close button has been clicked/i));
-    spy.mockRestore();
+
+    // Find the close button
+    const closeButton = screen.getByRole('button', { name: /close/i });
+
+    // Click the button using fireEvent
+    fireEvent.click(closeButton);
+
+    // Verify console.log was called with the correct message
+    expect(consoleSpy).toHaveBeenCalledWith('Close button has been clicked');
+
+    // Clean up the mock
+    consoleSpy.mockRestore();
+  });
+
+  test('verifies button contains an image element', () => {
+    render(<Notifications />);
+
+    const closeButton = screen.getByRole('button', { name: /close/i });
+    const imageElement = closeButton.querySelector('img');
+
+    expect(imageElement).toBeInTheDocument();
+    expect(imageElement).toHaveAttribute('src');
+    expect(imageElement).toHaveAttribute('alt', 'close');
+  });
+
+  test('verifies notifications have correct priority data attributes', () => {
+    render(<Notifications />);
+
+    const listItems = screen.getAllByRole('listitem');
+
+    // Check data-priority attributes
+    expect(listItems[0]).toHaveAttribute('data-priority', 'default');
+    expect(listItems[1]).toHaveAttribute('data-priority', 'urgent');
+    // Third item should not have data-priority (it uses dangerouslySetInnerHTML)
   });
 });
