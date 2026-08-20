@@ -26,10 +26,15 @@ function Notifications() {
       </button>
       <p>Here is the list of notifications</p>
       <ul>
-        <li data-priority="default">New course available</li>
-        <li data-priority="urgent">New resume available</li>
-        <li dangerouslySetInnerHTML={{ __html: getLatestNotification() }}></li>
-      </ul>
+  <li data-priority="default">New course available</li>
+
+  <li data-priority="urgent">New resume available</li>
+
+  <li
+    data-priority="urgent"
+    dangerouslySetInnerHTML={{ __html: getLatestNotification() }}
+  />
+</ul>
     </div>
   );
 }
