@@ -2,14 +2,10 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import Header from './Header';
 
-test('renders Header without crashing', () => {
-  const { container } = render(<Header />);
-  expect(container).toBeInTheDocument();
-});import React from 'react';
-import { render } from '@testing-library/react';
-import Header from './Header';
+describe('Header component', () => {
+  test('renders without crashing', () => {
+    const { container } = render(<Header />);
 
-test('renders Header without crashing', () => {
-  const { container } = render(<Header />);
-  expect(container).toBeInTheDocument();
+    expect(container).toBeInTheDocument();
+  });
 });
