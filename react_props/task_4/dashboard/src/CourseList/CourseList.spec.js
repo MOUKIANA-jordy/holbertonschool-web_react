@@ -37,16 +37,14 @@ describe('CourseList component', () => {
     expect(screen.getByText(/^React$/i)).toBeInTheDocument();
   });
 
-  test('renders one row in tbody when courses array is empty', () => {
-    render(<CourseList courses={[]} />);
+  test('renders one row when courses array is empty', () => {
+  render(<CourseList courses={[]} />);
 
-    const table = screen.getByRole('table');
-    const tableBody = table.querySelector('tbody');
-    const rows = within(tableBody).getAllByRole('row');
+  const rows = screen.getAllByRole('row');
 
-    expect(rows).toHaveLength(1);
-    expect(
-      screen.getByText(/no course available yet/i)
-    ).toBeInTheDocument();
-  });
+  expect(rows).toHaveLength(1);
+  expect(
+    screen.getByText(/no course available yet/i)
+  ).toBeInTheDocument();
+});
 });
