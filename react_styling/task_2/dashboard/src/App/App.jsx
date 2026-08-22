@@ -93,7 +93,7 @@ class App extends Component {
       <Fragment>
         <div className="root-notifications">
           <Notifications
-	    displayDrawer
+            displayDrawer
             notifications={notificationsList}
           />
         </div>
