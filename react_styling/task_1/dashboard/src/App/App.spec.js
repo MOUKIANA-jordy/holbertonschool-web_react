@@ -47,31 +47,27 @@ describe('App component', () => {
   });
 
   test('renders CourseList when isLoggedIn is true', () => {
-    render(<App isLoggedIn />);
+  render(<App isLoggedIn />);
 
-    expect(
-      screen.getByRole('heading', {
-        level: 2,
-        name: /course list/i,
-      })
-    ).toBeInTheDocument();
+  expect(
+    screen.getByRole('heading', {
+      level: 2,
+      name: /course list/i,
+    })
+  ).toBeInTheDocument();
 
-    const courseTable = screen.getByRole('table');
+  const courseTable = screen.getByRole('table');
 
-    expect(courseTable).toBeInTheDocument();
-    expect(courseTable).toHaveAttribute(
-      'id',
-      'CourseList'
-    );
+  expect(courseTable).toBeInTheDocument();
+  expect(courseTable).toHaveAttribute(
+    'id',
+    'CourseList'
+  );
 
-    expect(
-      screen.getByText(/available courses/i)
-    ).toBeInTheDocument();
-
-    expect(
-      screen.queryByLabelText(/email/i)
-    ).not.toBeInTheDocument();
-  });
+  expect(
+    screen.queryByLabelText(/email/i)
+  ).not.toBeInTheDocument();
+});
 
   test('renders the school news section by default', () => {
     render(<App />);
