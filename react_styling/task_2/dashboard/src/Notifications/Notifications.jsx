@@ -41,7 +41,7 @@ class Notifications extends Component {
     return (
       <Fragment>
         <div className="notification-title text-right mr-5 mb-2">
-          Your Notifications
+          Your notifications
         </div>
 
         {displayDrawer && (
@@ -81,7 +81,7 @@ class Notifications extends Component {
             </button>
 
             {notifications.length === 0 ? (
-              <p>No new notification for now</p>
+              <p>no new notification for now</p>
             ) : (
               <>
                 <p>
