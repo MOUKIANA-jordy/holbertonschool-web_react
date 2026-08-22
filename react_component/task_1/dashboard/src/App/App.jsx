@@ -17,11 +17,14 @@ class App extends Component {
   }
 
   componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown);
+    document.addEventListener(
+      'keydown',
+      this.handleKeyDown
+    );
   }
 
   componentWillUnmount() {
-    window.removeEventListener(
+    document.removeEventListener(
       'keydown',
       this.handleKeyDown
     );

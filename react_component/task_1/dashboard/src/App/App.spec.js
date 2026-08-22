@@ -29,7 +29,9 @@ describe('App component', () => {
     ).toBeInTheDocument();
 
     expect(
-      screen.getByRole('button', { name: /^ok$/i })
+      screen.getByRole('button', {
+        name: /^ok$/i,
+      })
     ).toBeInTheDocument();
 
     expect(
@@ -40,10 +42,17 @@ describe('App component', () => {
   test('renders CourseList when isLoggedIn is true', () => {
     render(<App isLoggedIn />);
 
-    const table = screen.getByRole('table');
+    const courseTable = screen.getByRole('table');
 
-    expect(table).toBeInTheDocument();
-    expect(table).toHaveAttribute('id', 'CourseList');
+    expect(courseTable).toBeInTheDocument();
+    expect(courseTable).toHaveAttribute(
+      'id',
+      'CourseList'
+    );
+
+    expect(
+      screen.getByText(/available courses/i)
+    ).toBeInTheDocument();
 
     expect(
       screen.queryByLabelText(/email/i)
@@ -59,7 +68,7 @@ describe('App component', () => {
 
     render(<App logOut={logOut} />);
 
-    fireEvent.keyDown(window, {
+    fireEvent.keyDown(document, {
       key: 'h',
       ctrlKey: true,
     });
@@ -78,7 +87,7 @@ describe('App component', () => {
 
     render(<App logOut={logOut} />);
 
-    fireEvent.keyDown(window, {
+    fireEvent.keyDown(document, {
       key: 'h',
       ctrlKey: true,
     });
@@ -87,6 +96,30 @@ describe('App component', () => {
     expect(alertSpy).toHaveBeenCalledWith(
       'Logging you out'
     );
+
+    alertSpy.mockRestore();
+  });
+
+  test('removes the keyboard listener when App is unmounted', () => {
+    const logOut = jest.fn();
+
+    const alertSpy = jest
+      .spyOn(window, 'alert')
+      .mockImplementation(() => {});
+
+    const { unmount } = render(
+      <App logOut={logOut} />
+    );
+
+    unmount();
+
+    fireEvent.keyDown(document, {
+      key: 'h',
+      ctrlKey: true,
+    });
+
+    expect(logOut).not.toHaveBeenCalled();
+    expect(alertSpy).not.toHaveBeenCalled();
 
     alertSpy.mockRestore();
   });
