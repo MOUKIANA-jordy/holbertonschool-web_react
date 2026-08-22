@@ -21,6 +21,13 @@ describe('App component', () => {
     render(<App isLoggedIn={false} />);
 
     expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: /log in to continue/i,
+      })
+    ).toBeInTheDocument();
+
+    expect(
       screen.getByLabelText(/email/i)
     ).toBeInTheDocument();
 
@@ -42,6 +49,13 @@ describe('App component', () => {
   test('renders CourseList when isLoggedIn is true', () => {
     render(<App isLoggedIn />);
 
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: /course list/i,
+      })
+    ).toBeInTheDocument();
+
     const courseTable = screen.getByRole('table');
 
     expect(courseTable).toBeInTheDocument();
@@ -57,6 +71,24 @@ describe('App component', () => {
     expect(
       screen.queryByLabelText(/email/i)
     ).not.toBeInTheDocument();
+  });
+
+  test('renders the school news section by default', () => {
+    render(<App />);
+
+    expect(
+      screen.getByRole('heading', {
+        level: 2,
+        name: /news from the school/i,
+      })
+    ).toBeInTheDocument();
+
+    const newsText = screen.getByText(
+      /holberton school news goes here/i
+    );
+
+    expect(newsText).toBeInTheDocument();
+    expect(newsText.tagName.toLowerCase()).toBe('p');
   });
 
   test('calls logOut once when control and h are pressed', () => {
@@ -100,7 +132,7 @@ describe('App component', () => {
     alertSpy.mockRestore();
   });
 
-  test('removes the keyboard listener when App is unmounted', () => {
+  test('removes keyboard listener when App is unmounted', () => {
     const logOut = jest.fn();
 
     const alertSpy = jest
