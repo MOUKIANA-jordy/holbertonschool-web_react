@@ -1,0 +1,56 @@
+.notification-title {
+  text-align: right;
+  margin: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.notification-items {
+  position: relative;
+  margin: 0 20px;
+  padding: 15px;
+  border: 1px dashed #e1003c;
+  font-size: 16px;
+}
+
+.notification-items p {
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.notification-items ul {
+  margin: 0;
+  padding-left: 30px;
+}
+
+.notification-items li {
+  margin-bottom: 8px;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.close-button img {
+  width: 15px;
+  height: 15px;
+}
+
+@media screen and (max-width: 768px) {
+  .notification-title {
+    margin: 10px;
+  }
+
+  .notification-items {
+    margin: 0;
+    padding: 12px;
+    border-left: none;
+    border-right: none;
+  }
+}
