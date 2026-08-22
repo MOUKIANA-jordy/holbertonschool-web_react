@@ -7,8 +7,8 @@ function CourseListRow({
   textSecondCell = null,
 }) {
   const rowClasses = isHeader
-    ? 'bg-table-header/[66%]'
-    : 'bg-table-rows/[45%]';
+    ? 'bg-table-header opacity-[66%]'
+    : 'bg-table-rows opacity-[45%]';
 
   const headerCellClasses =
     'border border-gray-400';
