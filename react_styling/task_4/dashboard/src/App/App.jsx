@@ -100,7 +100,7 @@ class App extends Component {
 
         <Header />
 
-        <main className="App-content flex-1 px-10 py-8 max-[912px]:px-6 max-[520px]:px-3 max-[520px]:py-5">
+        <main className="App-content flex-1 px-10 py-8 max-[912px]:px-5 max-[520px]:px-2 max-[520px]:py-5">
           {isLoggedIn ? (
             <BodySectionWithMarginBottom
               title="Course list"
