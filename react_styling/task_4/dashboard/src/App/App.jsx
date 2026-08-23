@@ -93,7 +93,7 @@ class App extends Component {
       <div className="App flex min-h-screen flex-col">
         <div className="root-notifications relative w-full">
           <Notifications
-            displayDrawer={true}
+	    displayDrawer={Notifications.displayDrawer}
             notifications={notificationsList}
           />
         </div>

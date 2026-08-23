@@ -7,6 +7,8 @@ import closeIcon from '../assets/close-button.png';
 import NotificationItem from './NotificationItem';
 
 class Notifications extends Component {
+  static displayDrawer = true;
+
   constructor(props) {
     super(props);
 
@@ -16,13 +18,11 @@ class Notifications extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { notifications, displayDrawer } =
-      this.props;
+    const { notifications } = this.props;
 
     return (
       nextProps.notifications.length !==
-        notifications.length ||
-      nextProps.displayDrawer !== displayDrawer
+      notifications.length
     );
   }
 
@@ -37,8 +37,10 @@ class Notifications extends Component {
   }
 
   render() {
-    const { notifications, displayDrawer } =
-      this.props;
+    const {
+      notifications,
+      displayDrawer,
+    } = this.props;
 
     return (
       <Fragment>
