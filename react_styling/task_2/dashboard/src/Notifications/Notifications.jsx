@@ -59,7 +59,7 @@ class Notifications extends Component {
             </button>
 
             {notifications.length === 0 ? (
-              <p>no new notification for now</p>
+              <p>No new notification for now</p>
             ) : (
               <>
                 <p>
