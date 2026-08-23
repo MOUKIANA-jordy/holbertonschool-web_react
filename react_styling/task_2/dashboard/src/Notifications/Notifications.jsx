@@ -9,7 +9,6 @@ class Notifications extends Component {
 
     this.handleCloseClick =
       this.handleCloseClick.bind(this);
-
     this.markAsRead = this.markAsRead.bind(this);
   }
 
@@ -18,7 +17,9 @@ class Notifications extends Component {
 
     return (
       nextProps.notifications.length !==
-      notifications.length
+        notifications.length ||
+      nextProps.displayDrawer !==
+        this.props.displayDrawer
     );
   }
 
@@ -40,48 +41,29 @@ class Notifications extends Component {
 
     return (
       <Fragment>
-        <div className="notification-title text-right mr-5 mb-2">
+        <div className="notification-title ml-auto mr-5 mb-2 w-1/4 text-right">
           Your notifications
         </div>
 
         {displayDrawer && (
-          <div
-            className="
-              notification-items
-              relative
-              w-full
-              md:w-1/4
-              md:ml-auto
-              md:mr-5
-              border
-              border-dashed
-              border-[var(--main-color)]
-              p-1.5
-            "
-          >
+          <div className="notification-items relative ml-auto mr-5 w-1/4 border-2 border-dashed border-[var(--main-color)] p-1.5">
             <button
               type="button"
-              className="
-                close-button
-                absolute
-                top-2
-                right-2
-                border-0
-                bg-transparent
-                cursor-pointer
-              "
+              className="close-button absolute right-2 top-2 cursor-pointer border-0 bg-transparent"
               aria-label="Close"
               onClick={this.handleCloseClick}
             >
               <img
-                className="w-4 h-4"
+                className="h-4 w-4"
                 src={closeIcon}
                 alt="close"
               />
             </button>
 
             {notifications.length === 0 ? (
-              <p>no new notification for now</p>
+              <p>
+                no new notification for now
+              </p>
             ) : (
               <>
                 <p>
@@ -89,16 +71,20 @@ class Notifications extends Component {
                 </p>
 
                 <ul className="pl-6">
-                  {notifications.map((notification) => (
-                    <NotificationItem
-                      key={notification.id}
-                      id={notification.id}
-                      type={notification.type}
-                      value={notification.value}
-                      html={notification.html}
-                      markAsRead={this.markAsRead}
-                    />
-                  ))}
+                  {notifications.map(
+                    (notification) => (
+                      <NotificationItem
+                        key={notification.id}
+                        id={notification.id}
+                        type={notification.type}
+                        value={notification.value}
+                        html={notification.html}
+                        markAsRead={
+                          this.markAsRead
+                        }
+                      />
+                    )
+                  )}
                 </ul>
               </>
             )}
