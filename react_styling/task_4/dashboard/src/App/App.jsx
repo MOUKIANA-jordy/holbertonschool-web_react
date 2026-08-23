@@ -49,16 +49,7 @@ class App extends Component {
   }
 
   render() {
-    const {
-      isLoggedIn: isLoggedInProp,
-    } = this.props;
-
-    const isLoggedIn = true;
-
-    const shouldDisplayCourses =
-      typeof isLoggedInProp === 'boolean'
-        ? isLoggedInProp
-        : isLoggedIn;
+    const { isLoggedIn = false } = this.props;
 
     const notificationsList = [
       {
@@ -110,7 +101,7 @@ class App extends Component {
         <Header />
 
         <main className="App-content flex-1 px-10 py-8 max-[912px]:px-6 max-[520px]:px-3 max-[520px]:py-5">
-          {shouldDisplayCourses ? (
+          {isLoggedIn ? (
             <BodySectionWithMarginBottom
               title="Course list"
             >
@@ -148,6 +139,7 @@ class App extends Component {
 }
 
 App.defaultProps = {
+  isLoggedIn: false,
   logOut: () => {},
 };
 
