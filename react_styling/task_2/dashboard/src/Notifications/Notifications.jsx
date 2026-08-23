@@ -13,13 +13,13 @@ class Notifications extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { notifications } = this.props;
+    const { notifications, displayDrawer } =
+      this.props;
 
     return (
       nextProps.notifications.length !==
         notifications.length ||
-      nextProps.displayDrawer !==
-        this.props.displayDrawer
+      nextProps.displayDrawer !== displayDrawer
     );
   }
 
@@ -34,19 +34,17 @@ class Notifications extends Component {
   }
 
   render() {
-    const {
-      notifications,
-      displayDrawer,
-    } = this.props;
+    const { notifications, displayDrawer } =
+      this.props;
 
     return (
       <Fragment>
-        <div className="notification-title ml-auto mr-5 mb-2 w-1/4 text-right">
+        <div className="notification-title mb-2 pr-5 text-right">
           Your notifications
         </div>
 
         {displayDrawer && (
-          <div className="notification-items relative ml-auto mr-5 w-1/4 border-2 border-dashed border-[var(--main-color)] p-1.5">
+          <div className="notification-items relative ml-auto w-1/4 border-2 border-dashed border-[var(--main-color)] p-1.5">
             <button
               type="button"
               className="close-button absolute right-2 top-2 cursor-pointer border-0 bg-transparent"
@@ -61,16 +59,14 @@ class Notifications extends Component {
             </button>
 
             {notifications.length === 0 ? (
-              <p>
-                no new notification for now
-              </p>
+              <p>no new notification for now</p>
             ) : (
               <>
                 <p>
                   Here is the list of notifications
                 </p>
 
-                <ul className="pl-6">
+                <ul className="list-disc pl-6">
                   {notifications.map(
                     (notification) => (
                       <NotificationItem
