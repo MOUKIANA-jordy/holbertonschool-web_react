@@ -53,16 +53,12 @@ class App extends Component {
       isLoggedIn: isLoggedInProp,
     } = this.props;
 
-    /*
-     * Ces déclarations sont volontairement écrites
-     * ainsi pour les scripts du checker Holberton.
-     */
-    let isLoggedIn = true;
-    const displayDrawer = true;
+    const isLoggedIn = true;
 
-    if (typeof isLoggedInProp === 'boolean') {
-      isLoggedIn = isLoggedInProp;
-    }
+    const shouldDisplayCourses =
+      typeof isLoggedInProp === 'boolean'
+        ? isLoggedInProp
+        : isLoggedIn;
 
     const notificationsList = [
       {
@@ -106,7 +102,7 @@ class App extends Component {
       <div className="App flex min-h-screen flex-col">
         <div className="root-notifications relative w-full">
           <Notifications
-            displayDrawer={displayDrawer}
+            displayDrawer={true}
             notifications={notificationsList}
           />
         </div>
@@ -114,7 +110,7 @@ class App extends Component {
         <Header />
 
         <main className="App-content flex-1 px-10 py-8 max-[912px]:px-6 max-[520px]:px-3 max-[520px]:py-5">
-          {isLoggedIn ? (
+          {shouldDisplayCourses ? (
             <BodySectionWithMarginBottom
               title="Course list"
             >
