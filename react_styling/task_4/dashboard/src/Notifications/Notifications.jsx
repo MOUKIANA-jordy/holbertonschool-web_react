@@ -44,7 +44,7 @@ class Notifications extends Component {
 
     return (
       <Fragment>
-        <div className="notification-title mb-2 pr-5 text-right max-[912px]:hidden">
+        <div className="notification-title mb-2 pr-5 text-right">
           Your notifications
         </div>
 
