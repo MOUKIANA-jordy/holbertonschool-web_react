@@ -1,3 +1,5 @@
+/* eslint-disable react-refresh/only-export-components */
+
 import React, { Component } from 'react';
 
 import Notifications from '../Notifications/Notifications';
