@@ -13,10 +13,15 @@ class Login extends Component {
       password = '',
     } = props;
 
+    const emailRegex =
+      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     this.state = {
       email,
       password,
-      enableSubmit: false,
+      enableSubmit:
+        emailRegex.test(email) &&
+        password.length >= 8,
     };
 
     this.handleLoginSubmit =
