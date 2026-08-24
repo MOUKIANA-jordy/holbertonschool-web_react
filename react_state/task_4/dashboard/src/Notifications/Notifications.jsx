@@ -3,32 +3,56 @@ import PropTypes from 'prop-types';
 import closeIcon from '../assets/close-button.png';
 import NotificationItem from './NotificationItem';
 
+const notificationShape = PropTypes.shape({
+  id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
+  value: PropTypes.string,
+  html: PropTypes.shape({
+    __html: PropTypes.string,
+  }),
+});
+
 class Notifications extends PureComponent {
   constructor(props) {
     super(props);
 
     this.handleTitleClick =
       this.handleTitleClick.bind(this);
+
     this.handleCloseClick =
       this.handleCloseClick.bind(this);
   }
 
   handleTitleClick() {
-    const { handleDisplayDrawer } = this.props;
+    const { handleDisplayDrawer } =
+      this.props;
+
     handleDisplayDrawer();
   }
 
   handleCloseClick() {
-    const { handleHideDrawer } = this.props;
+    const { handleHideDrawer } =
+      this.props;
+
     handleHideDrawer();
   }
 
   render() {
     const {
       notifications,
+      listNotifications,
       displayDrawer,
       markNotificationAsRead,
     } = this.props;
+
+    /*
+     * listNotifications permet la compatibilité
+     * avec les anciens tests Holberton.
+     */
+    const currentNotifications =
+      listNotifications !== null
+        ? listNotifications
+        : notifications;
 
     const titleClasses = [
       'notification-title',
@@ -43,7 +67,7 @@ class Notifications extends PureComponent {
     ];
 
     if (
-      notifications.length > 0 &&
+      currentNotifications.length > 0 &&
       !displayDrawer
     ) {
       titleClasses.push('animate-bounce');
@@ -83,8 +107,10 @@ class Notifications extends PureComponent {
               />
             </button>
 
-            {notifications.length === 0 ? (
-              <p>No new notification for now</p>
+            {currentNotifications.length === 0 ? (
+              <p>
+                No new notification for now
+              </p>
             ) : (
               <>
                 <p>
@@ -92,7 +118,7 @@ class Notifications extends PureComponent {
                 </p>
 
                 <ul className="pl-6 max-[912px]:list-disc max-[912px]:space-y-3">
-                  {notifications.map(
+                  {currentNotifications.map(
                     (notification) => (
                       <NotificationItem
                         key={notification.id}
@@ -118,6 +144,7 @@ class Notifications extends PureComponent {
 
 Notifications.defaultProps = {
   notifications: [],
+  listNotifications: null,
   displayDrawer: false,
   handleDisplayDrawer: () => {},
   handleHideDrawer: () => {},
@@ -126,14 +153,10 @@ Notifications.defaultProps = {
 
 Notifications.propTypes = {
   notifications: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      type: PropTypes.string.isRequired,
-      value: PropTypes.string,
-      html: PropTypes.shape({
-        __html: PropTypes.string,
-      }),
-    })
+    notificationShape
+  ),
+  listNotifications: PropTypes.arrayOf(
+    notificationShape
   ),
   displayDrawer: PropTypes.bool,
   handleDisplayDrawer: PropTypes.func,

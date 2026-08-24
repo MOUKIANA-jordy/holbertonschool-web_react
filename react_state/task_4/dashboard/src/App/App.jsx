@@ -32,10 +32,6 @@ export const notificationsList = [
   },
 ];
 
-/*
- * Nom conservé pour assurer la compatibilité
- * avec les tests du checker Holberton.
- */
 export const listNotificationsInitialState =
   notificationsList;
 
@@ -87,11 +83,6 @@ export class App extends Component {
 
       logOut: this.logOut,
 
-      /*
-       * notifications correspond à l’énoncé actuel.
-       * listNotifications assure la compatibilité
-       * avec certains tests Holberton.
-       */
       notifications: notificationsList,
       listNotifications: notificationsList,
 
@@ -182,6 +173,7 @@ export class App extends Component {
       user,
       logOut,
       notifications,
+      listNotifications,
       courses,
     } = this.state;
 
@@ -197,6 +189,9 @@ export class App extends Component {
             <Notifications
               displayDrawer={displayDrawer}
               notifications={notifications}
+              listNotifications={
+                listNotifications
+              }
               handleDisplayDrawer={
                 this.handleDisplayDrawer
               }
