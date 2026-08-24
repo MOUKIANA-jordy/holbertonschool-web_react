@@ -97,6 +97,7 @@ class App extends Component {
       event.key.toLowerCase() === 'h'
     ) {
       event.preventDefault();
+
       window.alert('Logging you out');
       this.logOut();
     }
@@ -139,13 +140,12 @@ class App extends Component {
       `Notification ${id} has been marked as read`
     );
 
-    this.setState((previousState) => ({
-      notifications:
-        previousState.notifications.filter(
-          (notification) =>
-            notification.id !== id
-        ),
-    }));
+    this.setState({
+      notifications: this.state.notifications.filter(
+        (notification) =>
+          notification.id !== id
+      ),
+    });
   }
 
   render() {
@@ -188,7 +188,9 @@ class App extends Component {
               <BodySectionWithMarginBottom
                 title="Course list"
               >
-                <CourseList courses={courses} />
+                <CourseList
+                  courses={courses}
+                />
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom
@@ -202,7 +204,9 @@ class App extends Component {
               </BodySectionWithMarginBottom>
             )}
 
-            <BodySection title="News from the School">
+            <BodySection
+              title="News from the School"
+            >
               <p>
                 Holberton School News goes here
               </p>
