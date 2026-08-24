@@ -96,19 +96,13 @@ describe('App component', () => {
 
     render(<App />);
 
-    const emailInput =
-      screen.getByLabelText(/email/i);
-
-    const passwordInput =
-      screen.getByLabelText(/password/i);
-
     await user.type(
-      emailInput,
+      screen.getByLabelText(/email/i),
       'jordy@example.com'
     );
 
     await user.type(
-      passwordInput,
+      screen.getByLabelText(/password/i),
       'password123'
     );
 
@@ -116,11 +110,16 @@ describe('App component', () => {
       screen.getByDisplayValue('OK')
     );
 
-    expect(
-      screen.getByText(
-        /Welcome jordy@example\.com/i
-      )
-    ).toBeInTheDocument();
+    const logoutSection =
+      document.getElementById('logoutSection');
+
+    expect(logoutSection).toBeInTheDocument();
+    expect(logoutSection).toHaveTextContent(
+      /Welcome/
+    );
+    expect(logoutSection).toHaveTextContent(
+      'jordy@example.com'
+    );
 
     expect(
       screen.getByRole('heading', {
@@ -133,7 +132,7 @@ describe('App component', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('logOut clears the user information', async () => {
+  test('logOut clears email and password and sets isLoggedIn to false', async () => {
     const user = userEvent.setup();
 
     render(<App />);
@@ -152,20 +151,20 @@ describe('App component', () => {
       screen.getByDisplayValue('OK')
     );
 
-    expect(
-      screen.getByText(
-        /Welcome jordy@example\.com/i
-      )
-    ).toBeInTheDocument();
+    const logoutSection =
+      document.getElementById('logoutSection');
+
+    expect(logoutSection).toBeInTheDocument();
+    expect(logoutSection).toHaveTextContent(
+      'jordy@example.com'
+    );
 
     await user.click(
       screen.getByText(/logout/i)
     );
 
     expect(
-      screen.queryByText(
-        /Welcome jordy@example\.com/i
-      )
+      document.getElementById('logoutSection')
     ).not.toBeInTheDocument();
 
     expect(
@@ -175,6 +174,12 @@ describe('App component', () => {
     expect(
       screen.getByLabelText(/password/i)
     ).toHaveValue('');
+
+    expect(
+      screen.getByRole('heading', {
+        name: 'Log in to continue',
+      })
+    ).toBeInTheDocument();
   });
 
   test('removes a notification when it is clicked', async () => {
@@ -183,15 +188,11 @@ describe('App component', () => {
     render(<App />);
 
     expect(
-      screen.getByText(
-        'New course available'
-      )
+      screen.getByText('New course available')
     ).toBeInTheDocument();
 
     await user.click(
-      screen.getByText(
-        'New course available'
-      )
+      screen.getByText('New course available')
     );
 
     expect(
@@ -211,9 +212,7 @@ describe('App component', () => {
     render(<App />);
 
     await user.click(
-      screen.getByText(
-        'New resume available'
-      )
+      screen.getByText('New resume available')
     );
 
     expect(consoleSpy).toHaveBeenCalledWith(
