@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   render,
   screen,
@@ -18,7 +17,17 @@ describe('Footer component', () => {
     ).toBeInTheDocument();
   });
 
-  test('does not display Contact us when logged out', () => {
+  test('does not display Contact us with default context', () => {
+    render(<Footer />);
+
+    expect(
+      screen.queryByRole('link', {
+        name: /contact us/i,
+      })
+    ).not.toBeInTheDocument();
+  });
+
+  test('does not display Contact us when user is logged out', () => {
     const contextValue = {
       user: {
         email: '',
@@ -41,7 +50,7 @@ describe('Footer component', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('displays Contact us when logged in', () => {
+  test('displays Contact us when user is logged in', () => {
     const contextValue = {
       user: {
         email: 'user@example.com',
