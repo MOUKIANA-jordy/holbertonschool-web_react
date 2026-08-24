@@ -2,11 +2,11 @@ import { memo } from 'react';
 import PropTypes from 'prop-types';
 
 function NotificationItem({
-  id,
-  type,
-  value,
+  id = 0,
+  type = 'default',
+  value = '',
   html,
-  markAsRead,
+  markAsRead = () => {},
 }) {
   const handleClick = () => {
     markAsRead(id);
@@ -38,14 +38,6 @@ function NotificationItem({
     </li>
   );
 }
-
-NotificationItem.defaultProps = {
-  id: 0,
-  type: 'default',
-  value: '',
-  html: undefined,
-  markAsRead: () => {},
-};
 
 NotificationItem.propTypes = {
   id: PropTypes.number,

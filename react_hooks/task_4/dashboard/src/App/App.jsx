@@ -69,22 +69,28 @@ function App() {
     setDisplayDrawer,
   ] = useState(true);
 
-  const [user, setUser] = useState(
-    defaultUser
-  );
+  const [user, setUser] = useState({
+    ...defaultUser,
+  });
 
   const [
     notifications,
     setNotifications,
   ] = useState(notificationsList);
 
-  const handleDisplayDrawer = useCallback(() => {
-    setDisplayDrawer(true);
-  }, []);
+  const handleDisplayDrawer = useCallback(
+    () => {
+      setDisplayDrawer(true);
+    },
+    []
+  );
 
-  const handleHideDrawer = useCallback(() => {
-    setDisplayDrawer(false);
-  }, []);
+  const handleHideDrawer = useCallback(
+    () => {
+      setDisplayDrawer(false);
+    },
+    []
+  );
 
   const logIn = useCallback(
     (email, password) => {
@@ -112,8 +118,8 @@ function App() {
       );
 
       setNotifications(
-        (currentNotifications) =>
-          currentNotifications.filter(
+        (previousNotifications) =>
+          previousNotifications.filter(
             (notification) =>
               notification.id !== id
           )
@@ -135,8 +141,8 @@ function App() {
       <div className="flex min-h-screen flex-col">
         <div className="root-notifications relative w-full">
           <Notifications
-            displayDrawer={displayDrawer}
             notifications={notifications}
+            displayDrawer={displayDrawer}
             handleDisplayDrawer={
               handleDisplayDrawer
             }
