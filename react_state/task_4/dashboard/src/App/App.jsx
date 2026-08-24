@@ -10,7 +10,7 @@ import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBot
 import NewContext from '../Context/context';
 import { getLatestNotification } from '../utils/utils';
 
-const notificationsList = [
+export const notificationsList = [
   {
     id: 1,
     type: 'default',
@@ -30,7 +30,7 @@ const notificationsList = [
   },
 ];
 
-const coursesList = [
+export const coursesList = [
   {
     id: 1,
     name: 'ES6',
@@ -48,7 +48,7 @@ const coursesList = [
   },
 ];
 
-class App extends Component {
+export class App extends Component {
   constructor(props) {
     super(props);
 
@@ -140,11 +140,14 @@ class App extends Component {
       `Notification ${id} has been marked as read`
     );
 
-    this.setState({
-      notifications: this.state.notifications.filter(
+    const updatedNotifications =
+      this.state.notifications.filter(
         (notification) =>
           notification.id !== id
-      ),
+      );
+
+    this.setState({
+      notifications: updatedNotifications,
     });
   }
 
