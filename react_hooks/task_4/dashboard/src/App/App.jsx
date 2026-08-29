@@ -78,30 +78,21 @@ export function App() {
     setNotifications,
   ] = useState(notificationsList);
 
-  const handleDisplayDrawer = useCallback(
-    () => {
-      setDisplayDrawer(true);
-    },
-    []
-  );
+  const handleDisplayDrawer = useCallback(() => {
+    setDisplayDrawer(true);
+  }, []);
 
-  const handleHideDrawer = useCallback(
-    () => {
-      setDisplayDrawer(false);
-    },
-    []
-  );
+  const handleHideDrawer = useCallback(() => {
+    setDisplayDrawer(false);
+  }, []);
 
-  const logIn = useCallback(
-    (email, password) => {
-      setUser({
-        email,
-        password,
-        isLoggedIn: true,
-      });
-    },
-    []
-  );
+  const logIn = useCallback((email, password) => {
+    setUser({
+      email,
+      password,
+      isLoggedIn: true,
+    });
+  }, []);
 
   const logOut = useCallback(() => {
     setUser({
@@ -112,14 +103,14 @@ export function App() {
   }, []);
 
   const markNotificationAsRead = useCallback((id) => {
-    console.log(
-      `Notification ${id} has been marked as read`
-    );
-
     setNotifications((previousNotifications) =>
       previousNotifications.filter(
         (notification) => notification.id !== id
       )
+    );
+
+    console.log(
+      `Notification ${id} has been marked as read`
     );
   }, []);
 
@@ -137,7 +128,6 @@ export function App() {
         <div className="root-notifications relative w-full">
           <Notifications
             notifications={notifications}
-            listNotifications={notifications}
             displayDrawer={displayDrawer}
             handleDisplayDrawer={
               handleDisplayDrawer
@@ -174,9 +164,7 @@ export function App() {
             </BodySectionWithMarginBottom>
           )}
 
-          <BodySection
-            title="News from the School"
-          >
+          <BodySection title="News from the School">
             <p>
               Holberton School News goes here
             </p>

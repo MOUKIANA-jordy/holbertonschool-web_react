@@ -1,4 +1,7 @@
-import { memo } from 'react';
+import {
+  memo,
+  useCallback,
+} from 'react';
 import PropTypes from 'prop-types';
 
 function NotificationItem({
@@ -8,9 +11,9 @@ function NotificationItem({
   html,
   markAsRead = () => {},
 }) {
-  const handleClick = () => {
+  const handleClick = useCallback(() => {
     markAsRead(id);
-  };
+  }, [id, markAsRead]);
 
   const typeClass =
     type === 'urgent'
