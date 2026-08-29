@@ -111,22 +111,17 @@ export function App() {
     });
   }, []);
 
-  const markNotificationAsRead = useCallback(
-    (id) => {
-      console.log(
-        `Notification ${id} has been marked as read`
-      );
+  const markNotificationAsRead = useCallback((id) => {
+    console.log(
+      `Notification ${id} has been marked as read`
+    );
 
-      setNotifications(
-        (previousNotifications) =>
-          previousNotifications.filter(
-            (notification) =>
-              notification.id !== id
-          )
-      );
-    },
-    []
-  );
+    setNotifications((previousNotifications) =>
+      previousNotifications.filter(
+        (notification) => notification.id !== id
+      )
+    );
+  }, []);
 
   const contextValue = useMemo(
     () => ({
