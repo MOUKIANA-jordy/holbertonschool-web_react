@@ -137,6 +137,7 @@ export function App() {
         <div className="root-notifications relative w-full">
           <Notifications
             notifications={notifications}
+            listNotifications={notifications}
             displayDrawer={displayDrawer}
             handleDisplayDrawer={
               handleDisplayDrawer
