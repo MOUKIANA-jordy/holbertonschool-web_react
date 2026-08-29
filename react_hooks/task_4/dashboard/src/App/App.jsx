@@ -63,7 +63,7 @@ const defaultUser = {
   isLoggedIn: false,
 };
 
-function App() {
+export function App() {
   const [
     displayDrawer,
     setDisplayDrawer,
