@@ -127,11 +127,11 @@ class App extends Component {
       `Notification ${id} has been marked as read`
     );
 
-    this.setState({
-      notifications: this.state.notifications.filter(
+    this.setState((prevState) => ({
+      notifications: prevState.notifications.filter(
         (notification) => notification.id !== id
       ),
-    });
+    }));
   }
 
   handleKeyDown(event) {
