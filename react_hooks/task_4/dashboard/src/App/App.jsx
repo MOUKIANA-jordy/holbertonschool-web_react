@@ -2,7 +2,6 @@
 
 import {
   useCallback,
-  useMemo,
   useState,
 } from 'react';
 
@@ -81,48 +80,46 @@ function App() {
     setDisplayDrawer(false);
   }, []);
 
-  const logIn = useCallback((email, password) => {
+  const logIn = (email, password) => {
     setUser({
       email,
       password,
       isLoggedIn: true,
     });
-  }, []);
+  };
 
-  const logOut = useCallback(() => {
+  const logOut = () => {
     setUser({
       email: '',
       password: '',
       isLoggedIn: false,
     });
-  }, []);
+  };
 
   const markNotificationAsRead = useCallback(
     (id) => {
+      setNotifications(
+        (currentNotifications) =>
+          currentNotifications.filter(
+            (notification) =>
+              notification.id !== id
+          )
+      );
+
       console.log(
         `Notification ${id} has been marked as read`
       );
-
-      setNotifications(
-        notifications.filter(
-          (notification) =>
-            notification.id !== id
-        )
-      );
     },
-    [notifications]
-  );
-
-  const contextValue = useMemo(
-    () => ({
-      user,
-      logOut,
-    }),
-    [user, logOut]
+    []
   );
 
   return (
-    <NewContext.Provider value={contextValue}>
+    <NewContext.Provider
+      value={{
+        user,
+        logOut,
+      }}
+    >
       <div className="flex min-h-screen flex-col">
         <div className="root-notifications relative w-full">
           <Notifications
