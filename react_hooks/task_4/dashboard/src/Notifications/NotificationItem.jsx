@@ -1,19 +1,16 @@
-import {
-  memo,
-  useCallback,
-} from 'react';
+import { memo } from 'react';
 import PropTypes from 'prop-types';
 
 function NotificationItem({
-  id = 0,
-  type = 'default',
-  value = '',
+  id,
+  type,
+  value,
   html,
-  markAsRead = () => {},
+  markAsRead,
 }) {
-  const handleClick = useCallback(() => {
+  const handleClick = () => {
     markAsRead(id);
-  }, [id, markAsRead]);
+  };
 
   const typeClass =
     type === 'urgent'
@@ -41,6 +38,14 @@ function NotificationItem({
     </li>
   );
 }
+
+NotificationItem.defaultProps = {
+  id: 0,
+  type: 'default',
+  value: '',
+  html: undefined,
+  markAsRead: () => {},
+};
 
 NotificationItem.propTypes = {
   id: PropTypes.number,
