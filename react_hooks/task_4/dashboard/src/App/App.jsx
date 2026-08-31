@@ -90,22 +90,17 @@ function App() {
     });
   };
 
-  const markNotificationAsRead = useCallback(
-    (id) => {
-      setNotifications(
-        (currentNotifications) =>
-          currentNotifications.filter(
-            (notification) =>
-              notification.id !== id
-          )
-      );
+  const markNotificationAsRead = useCallback((id) => {
+    setNotifications((currentNotifications) =>
+      currentNotifications.filter(
+        (notification) => notification.id !== id
+      )
+    );
 
-      console.log(
-        `Notification ${id} has been marked as read`
-      );
-    },
-    []
-  );
+    console.log(
+      `Notification ${id} has been marked as read`
+    );
+  }, []);
 
   return (
     <NewContext.Provider
