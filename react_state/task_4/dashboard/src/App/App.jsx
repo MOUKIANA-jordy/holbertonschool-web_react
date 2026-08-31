@@ -60,8 +60,6 @@ class App extends Component {
       this.handleHideDrawer.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
-    this.markNotificationAsRead =
-      this.markNotificationAsRead.bind(this);
 
     this.state = {
       displayDrawer: false,
@@ -122,15 +120,15 @@ class App extends Component {
     });
   }
 
-  markNotificationAsRead(id) {
+  markNotificationAsRead = (id) => {
     console.log(`Notification ${id} has been marked as read`);
 
-    this.setState({
-      notifications: this.state.notifications.filter(
+    this.setState((prevState) => ({
+      notifications: prevState.notifications.filter(
         (notification) => notification.id !== id
       ),
-    });
-  }
+    }));
+  };
 
   handleKeyDown(event) {
     if (
