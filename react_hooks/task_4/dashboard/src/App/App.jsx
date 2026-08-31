@@ -97,17 +97,21 @@ function App() {
     });
   }, []);
 
-  const markNotificationAsRead = useCallback((id) => {
-    console.log(
-      `Notification ${id} has been marked as read`
-    );
+  const markNotificationAsRead = useCallback(
+    (id) => {
+      console.log(
+        `Notification ${id} has been marked as read`
+      );
 
-    setNotifications((currentNotifications) =>
-      currentNotifications.filter(
-        (notification) => notification.id !== id
-      )
-    );
-  }, []);
+      setNotifications(
+        notifications.filter(
+          (notification) =>
+            notification.id !== id
+        )
+      );
+    },
+    [notifications]
+  );
 
   const contextValue = useMemo(
     () => ({
