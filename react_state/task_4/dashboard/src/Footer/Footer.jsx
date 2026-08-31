@@ -1,4 +1,5 @@
 import React from 'react';
+import AppContext from '../Context/context';
 import {
   getCurrentYear,
   getFooterCopy,
@@ -11,6 +12,22 @@ function Footer() {
         Copyright {getCurrentYear()} -{' '}
         {getFooterCopy(true)}
       </p>
+
+      <AppContext.Consumer>
+        {({ user }) =>
+          user &&
+          user.isLoggedIn && (
+            <p>
+              <a
+                href="#"
+                className="text-[var(--main-color)] underline"
+              >
+                Contact us
+              </a>
+            </p>
+          )
+        }
+      </AppContext.Consumer>
     </div>
   );
 }
