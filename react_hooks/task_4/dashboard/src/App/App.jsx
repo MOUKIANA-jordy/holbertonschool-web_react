@@ -60,7 +60,7 @@ const defaultUser = {
   isLoggedIn: false,
 };
 
-const App = () => {
+function App() {
   const [
     displayDrawer,
     setDisplayDrawer,
@@ -97,22 +97,17 @@ const App = () => {
     });
   }, []);
 
-  const markNotificationAsRead = useCallback(
-    (id) => {
-      console.log(
-        `Notification ${id} has been marked as read`
-      );
+  const markNotificationAsRead = useCallback((id) => {
+    console.log(
+      `Notification ${id} has been marked as read`
+    );
 
-      setNotifications(
-        (previousNotifications) =>
-          previousNotifications.filter(
-            (notification) =>
-              notification.id !== id
-          )
-      );
-    },
-    []
-  );
+    setNotifications((currentNotifications) =>
+      currentNotifications.filter(
+        (notification) => notification.id !== id
+      )
+    );
+  }, []);
 
   const contextValue = useMemo(
     () => ({
@@ -175,7 +170,7 @@ const App = () => {
       </div>
     </NewContext.Provider>
   );
-};
+}
 
 export { App };
 export default App;
