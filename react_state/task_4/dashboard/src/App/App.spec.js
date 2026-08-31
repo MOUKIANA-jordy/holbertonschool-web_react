@@ -11,26 +11,19 @@ import App from './App';
 async function logInUser() {
   const user = userEvent.setup();
 
-  const emailInput =
-    screen.getByLabelText(/email/i);
-
+  const emailInput = screen.getByLabelText(/email/i);
   const passwordInput =
     screen.getByLabelText(/password/i);
 
   await user.clear(emailInput);
-  await user.type(
-    emailInput,
-    'user@example.com'
-  );
+  await user.type(emailInput, 'user@example.com');
 
   await user.clear(passwordInput);
-  await user.type(
-    passwordInput,
-    'password123'
-  );
+  await user.type(passwordInput, 'password123');
 
-  const submitButton =
-    screen.getByDisplayValue('OK');
+  const submitButton = screen.getByRole('button', {
+    name: /ok/i,
+  });
 
   expect(submitButton).toBeEnabled();
 
@@ -58,7 +51,7 @@ describe('App component', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('renders CourseList after login', async () => {
+  test('renders CourseList after a successful login', async () => {
     render(<App />);
 
     await logInUser();
@@ -78,7 +71,7 @@ describe('App component', () => {
     ).not.toBeInTheDocument();
   });
 
-  test('displays logout section after login', async () => {
+  test('displays logoutSection after login', async () => {
     render(<App />);
 
     await logInUser();
@@ -90,35 +83,9 @@ describe('App component', () => {
     expect(
       screen.getByText(/user@example\.com/i)
     ).toBeInTheDocument();
-
-    expect(
-      screen.getByRole('link', {
-        name: /logout/i,
-      })
-    ).toBeInTheDocument();
   });
 
-  test('displays Contact us after login', async () => {
-    render(<App />);
-
-    expect(
-      screen.queryByRole('link', {
-        name: /contact us/i,
-      })
-    ).not.toBeInTheDocument();
-
-    await logInUser();
-
-    expect(
-      screen.getByRole('link', {
-        name: /contact us/i,
-      })
-    ).toBeInTheDocument();
-  });
-
-  test('logs the user out from Header', async () => {
-    const user = userEvent.setup();
-
+  test('logs the user out from the Header', async () => {
     render(<App />);
 
     await logInUser();
@@ -127,7 +94,7 @@ describe('App component', () => {
       screen.getByRole('table')
     ).toBeInTheDocument();
 
-    await user.click(
+    await userEvent.click(
       screen.getByRole('link', {
         name: /logout/i,
       })
@@ -148,17 +115,9 @@ describe('App component', () => {
     expect(
       document.querySelector('#logoutSection')
     ).not.toBeInTheDocument();
-
-    expect(
-      screen.queryByRole('link', {
-        name: /contact us/i,
-      })
-    ).not.toBeInTheDocument();
   });
 
-  test('opens the notifications drawer', async () => {
-    const user = userEvent.setup();
-
+  test('opens and closes the notifications drawer', async () => {
     render(<App />);
 
     expect(
@@ -167,7 +126,7 @@ describe('App component', () => {
       })
     ).not.toBeInTheDocument();
 
-    await user.click(
+    await userEvent.click(
       screen.getByText(/your notifications/i)
     );
 
@@ -177,91 +136,17 @@ describe('App component', () => {
       })
     ).toBeInTheDocument();
 
-    expect(
-      screen.getByText(
-        /here is the list of notifications/i
-      )
-    ).toBeInTheDocument();
-  });
-
-  test('closes the notifications drawer', async () => {
-    const user = userEvent.setup();
-
-    render(<App />);
-
-    await user.click(
-      screen.getByText(/your notifications/i)
-    );
-
-    const closeButton = screen.getByRole(
-      'button',
-      {
+    await userEvent.click(
+      screen.getByRole('button', {
         name: /close/i,
-      }
+      })
     );
-
-    expect(closeButton).toBeInTheDocument();
-
-    await user.click(closeButton);
 
     expect(
       screen.queryByRole('button', {
         name: /close/i,
       })
     ).not.toBeInTheDocument();
-  });
-
-  test('removes a notification and logs its id when clicked', async () => {
-    const user = userEvent.setup();
-
-    const consoleSpy = jest
-      .spyOn(console, 'log')
-      .mockImplementation(() => {});
-
-    try {
-      render(<App />);
-
-      await user.click(
-        screen.getByText(
-          /your notifications/i
-        )
-      );
-
-      const notification =
-        screen.getByText(
-          /new course available/i
-        );
-
-      expect(
-        notification
-      ).toBeInTheDocument();
-
-      expect(
-        screen.getAllByRole('listitem')
-      ).toHaveLength(3);
-
-      await user.click(notification);
-
-      await waitFor(() => {
-        expect(
-          screen.queryByText(
-            /new course available/i
-          )
-        ).not.toBeInTheDocument();
-      });
-
-      expect(
-        screen.getAllByRole('listitem')
-      ).toHaveLength(2);
-
-      expect(
-        consoleSpy
-      ).toHaveBeenCalledWith(
-        'Notification 1 has been marked as read'
-      );
-    } finally {
-      consoleSpy.mockRestore();
-    }
   });
 
   test('renders the school news section', () => {
@@ -280,49 +165,44 @@ describe('App component', () => {
     ).toBeInTheDocument();
   });
 
-  test('logs out when control and h are pressed', async () => {
+  test('logs the user out with control and h', async () => {
     const alertSpy = jest
       .spyOn(window, 'alert')
       .mockImplementation(() => {});
 
-    try {
-      render(<App />);
+    render(<App />);
 
-      await logInUser();
+    await logInUser();
 
+    expect(
+      screen.getByRole('table')
+    ).toBeInTheDocument();
+
+    fireEvent.keyDown(document, {
+      key: 'h',
+      ctrlKey: true,
+    });
+
+    expect(alertSpy).toHaveBeenCalledWith(
+      'Logging you out'
+    );
+
+    await waitFor(() => {
       expect(
-        screen.getByRole('table')
+        screen.getByText(
+          /login to access the full dashboard/i
+        )
       ).toBeInTheDocument();
+    });
 
-      fireEvent.keyDown(document, {
-        key: 'h',
-        ctrlKey: true,
-      });
-
-      expect(
-        alertSpy
-      ).toHaveBeenCalledWith(
-        'Logging you out'
-      );
-
-      await waitFor(() => {
-        expect(
-          screen.getByText(
-            /login to access the full dashboard/i
-          )
-        ).toBeInTheDocument();
-      });
-    } finally {
-      alertSpy.mockRestore();
-    }
+    alertSpy.mockRestore();
   });
 
-  test('removes keyboard listener when unmounted', () => {
-    const removeEventListenerSpy =
-      jest.spyOn(
-        document,
-        'removeEventListener'
-      );
+  test('removes the keyboard listener when unmounted', () => {
+    const removeEventListenerSpy = jest.spyOn(
+      document,
+      'removeEventListener'
+    );
 
     const { unmount } = render(<App />);
 

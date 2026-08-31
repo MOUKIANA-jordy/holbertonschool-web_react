@@ -1,5 +1,3 @@
-/* eslint-disable react-refresh/only-export-components */
-
 import React, { Component } from 'react';
 
 import Notifications from '../Notifications/Notifications';
@@ -12,81 +10,27 @@ import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBot
 import NewContext from '../Context/context';
 import { getLatestNotification } from '../utils/utils';
 
-export const notificationsList = [
-  {
-    id: 1,
-    type: 'default',
-    value: 'New course available',
-  },
-  {
-    id: 2,
-    type: 'urgent',
-    value: 'New resume available',
-  },
-  {
-    id: 3,
-    type: 'urgent',
-    html: {
-      __html: getLatestNotification(),
-    },
-  },
-];
-
-export const listNotificationsInitialState =
-  notificationsList;
-
-export const coursesList = [
-  {
-    id: 1,
-    name: 'ES6',
-    credit: 60,
-  },
-  {
-    id: 2,
-    name: 'Webpack',
-    credit: 20,
-  },
-  {
-    id: 3,
-    name: 'React',
-    credit: 40,
-  },
-];
-
-export class App extends Component {
+class App extends Component {
   constructor(props) {
     super(props);
 
+    this.handleKeyDown =
+      this.handleKeyDown.bind(this);
+    this.handleDisplayDrawer =
+      this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer =
+      this.handleHideDrawer.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
 
-    this.handleKeyDown =
-      this.handleKeyDown.bind(this);
-
-    this.handleDisplayDrawer =
-      this.handleDisplayDrawer.bind(this);
-
-    this.handleHideDrawer =
-      this.handleHideDrawer.bind(this);
-
-    this.markNotificationAsRead =
-      this.markNotificationAsRead.bind(this);
-
     this.state = {
       displayDrawer: false,
-
       user: {
         email: '',
         password: '',
         isLoggedIn: false,
       },
-
       logOut: this.logOut,
-
-      notifications: notificationsList,
-      listNotifications: notificationsList,
-
-      courses: coursesList,
     };
   }
 
@@ -102,20 +46,6 @@ export class App extends Component {
       'keydown',
       this.handleKeyDown
     );
-  }
-
-  handleKeyDown(event) {
-    if (
-      event.ctrlKey &&
-      event.key &&
-      event.key.toLowerCase() === 'h'
-    ) {
-      event.preventDefault();
-
-      window.alert('Logging you out');
-
-      this.logOut();
-    }
   }
 
   handleDisplayDrawer() {
@@ -150,70 +80,87 @@ export class App extends Component {
     });
   }
 
-  markNotificationAsRead(id) {
-    console.log(
-      `Notification ${id} has been marked as read`
-    );
-
-    const updatedNotifications =
-      this.state.notifications.filter(
-        (notification) =>
-          notification.id !== id
-      );
-
-    this.setState({
-      notifications: updatedNotifications,
-      listNotifications: updatedNotifications,
-    });
+  handleKeyDown(event) {
+    if (
+      'ctrlKey' in event &&
+      'key' in event &&
+      event.ctrlKey &&
+      event.key.toLowerCase() === 'h'
+    ) {
+      event.preventDefault();
+      window.alert('Logging you out');
+      this.logOut();
+    }
   }
 
   render() {
     const {
       displayDrawer,
       user,
-      logOut,
-      notifications,
-      listNotifications,
-      courses,
     } = this.state;
 
-    const contextValue = {
-      user,
-      logOut,
-    };
+    const notificationsList = [
+      {
+        id: 1,
+        type: 'default',
+        value: 'New course available',
+      },
+      {
+        id: 2,
+        type: 'urgent',
+        value: 'New resume available',
+      },
+      {
+        id: 3,
+        type: 'urgent',
+        html: {
+          __html: getLatestNotification(),
+        },
+      },
+    ];
+
+    const coursesList = [
+      {
+        id: 1,
+        name: 'ES6',
+        credit: 60,
+      },
+      {
+        id: 2,
+        name: 'Webpack',
+        credit: 20,
+      },
+      {
+        id: 3,
+        name: 'React',
+        credit: 40,
+      },
+    ];
 
     return (
-      <NewContext.Provider value={contextValue}>
-        <div className="flex min-h-screen flex-col">
+      <NewContext.Provider value={this.state}>
+        <div className="App flex min-h-screen flex-col">
           <div className="root-notifications relative w-full">
             <Notifications
               displayDrawer={displayDrawer}
-              notifications={notifications}
-              listNotifications={
-                listNotifications
-              }
+              notifications={notificationsList}
               handleDisplayDrawer={
                 this.handleDisplayDrawer
               }
               handleHideDrawer={
                 this.handleHideDrawer
               }
-              markNotificationAsRead={
-                this.markNotificationAsRead
-              }
             />
           </div>
 
           <Header />
 
-          <main className="App-content flex-1 px-6 py-8 max-[520px]:px-3">
+          <main className="App-content flex-1 px-10 py-8 max-[912px]:px-5 max-[520px]:px-2 max-[520px]:py-5">
             {user.isLoggedIn ? (
               <BodySectionWithMarginBottom
                 title="Course list"
               >
-                <CourseList
-                  courses={courses}
-                />
+                <CourseList courses={coursesList} />
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom
@@ -227,11 +174,20 @@ export class App extends Component {
               </BodySectionWithMarginBottom>
             )}
 
-            <BodySection
-              title="News from the School"
-            >
-              <p>
+            <BodySection title="News from the School">
+              <p className="sr-only">
                 Holberton School News goes here
+              </p>
+
+              <p className="leading-relaxed">
+                ipsum Lorem ipsum dolor sit amet
+                consectetur, adipisicing elit.
+                Similique, asperiores architecto
+                blanditiis fuga doloribus sit illum
+                aliquid ea distinctio minus
+                accusantium, impedit quo voluptatibus
+                ut magni dicta. Recusandae, quia
+                dicta?
               </p>
             </BodySection>
           </main>
