@@ -1,5 +1,5 @@
 import React from 'react';
-import AppContext from '../Context/context';
+import NewContext from '../Context/context';
 import {
   getCurrentYear,
   getFooterCopy,
@@ -13,9 +13,8 @@ function Footer() {
         {getFooterCopy(true)}
       </p>
 
-      <AppContext.Consumer>
+      <NewContext.Consumer>
         {({ user }) =>
-          user &&
           user.isLoggedIn && (
             <p>
               <a
@@ -27,7 +26,7 @@ function Footer() {
             </p>
           )
         }
-      </AppContext.Consumer>
+      </NewContext.Consumer>
     </div>
   );
 }
