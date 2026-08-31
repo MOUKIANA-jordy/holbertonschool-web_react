@@ -1,9 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import {
-  useCallback,
-  useState,
-} from 'react';
+import { useCallback, useState } from 'react';
 
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
@@ -55,18 +52,14 @@ export const coursesList = [
   },
 ];
 
-function App() {
-  const [
-    displayDrawer,
-    setDisplayDrawer,
-  ] = useState(true);
+export default function App() {
+  const [displayDrawer, setDisplayDrawer] =
+    useState(true);
 
   const [user, setUser] = useState(contextUser);
 
-  const [
-    notifications,
-    setNotifications,
-  ] = useState(notificationsList);
+  const [notifications, setNotifications] =
+    useState(notificationsList);
 
   const handleDisplayDrawer = useCallback(() => {
     setDisplayDrawer(true);
@@ -91,8 +84,8 @@ function App() {
   };
 
   const markNotificationAsRead = useCallback((id) => {
-    setNotifications((currentNotifications) =>
-      currentNotifications.filter(
+    setNotifications((previousNotifications) =>
+      previousNotifications.filter(
         (notification) => notification.id !== id
       )
     );
@@ -161,6 +154,3 @@ function App() {
     </NewContext.Provider>
   );
 }
-
-export { App };
-export default App;
