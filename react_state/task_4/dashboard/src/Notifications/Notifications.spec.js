@@ -78,7 +78,9 @@ describe('Notifications component', () => {
       })
     );
 
-    expect(handleHideDrawer).toHaveBeenCalledTimes(1);
+    expect(
+      handleHideDrawer
+    ).toHaveBeenCalledTimes(1);
 
     consoleSpy.mockRestore();
   });
@@ -195,15 +197,16 @@ describe('Notifications component', () => {
     consoleSpy.mockRestore();
   });
 
-  test('logs notification id when an item is clicked', () => {
-    const consoleSpy = jest
-      .spyOn(console, 'log')
-      .mockImplementation(() => {});
+  test('calls markNotificationAsRead when an item is clicked', () => {
+    const markNotificationAsRead = jest.fn();
 
     render(
       <Notifications
         displayDrawer
         notifications={notificationsList}
+        markNotificationAsRead={
+          markNotificationAsRead
+        }
       />
     );
 
@@ -211,14 +214,12 @@ describe('Notifications component', () => {
       screen.getByText(/new course available/i)
     );
 
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Notification 1 has been marked as read'
-    );
-
-    consoleSpy.mockRestore();
+    expect(
+      markNotificationAsRead
+    ).toHaveBeenCalledWith(1);
   });
 
-  test('does not re-render when notification length remains unchanged', () => {
+  test('re-renders when the notifications prop changes', () => {
     const initialNotifications = [
       {
         id: 1,
@@ -250,11 +251,11 @@ describe('Notifications component', () => {
     );
 
     expect(
-      screen.getByText(/initial notification/i)
+      screen.getByText(/updated notification/i)
     ).toBeInTheDocument();
 
     expect(
-      screen.queryByText(/updated notification/i)
+      screen.queryByText(/initial notification/i)
     ).not.toBeInTheDocument();
   });
 

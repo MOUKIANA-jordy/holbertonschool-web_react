@@ -10,6 +10,44 @@ import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBot
 import NewContext from '../Context/context';
 import { getLatestNotification } from '../utils/utils';
 
+const notificationsList = [
+  {
+    id: 1,
+    type: 'default',
+    value: 'New course available',
+  },
+  {
+    id: 2,
+    type: 'urgent',
+    value: 'New resume available',
+  },
+  {
+    id: 3,
+    type: 'urgent',
+    html: {
+      __html: getLatestNotification(),
+    },
+  },
+];
+
+const coursesList = [
+  {
+    id: 1,
+    name: 'ES6',
+    credit: 60,
+  },
+  {
+    id: 2,
+    name: 'Webpack',
+    credit: 20,
+  },
+  {
+    id: 3,
+    name: 'React',
+    credit: 40,
+  },
+];
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +60,8 @@ class App extends Component {
       this.handleHideDrawer.bind(this);
     this.logIn = this.logIn.bind(this);
     this.logOut = this.logOut.bind(this);
+    this.markNotificationAsRead =
+      this.markNotificationAsRead.bind(this);
 
     this.state = {
       displayDrawer: false,
@@ -31,6 +71,8 @@ class App extends Component {
         isLoggedIn: false,
       },
       logOut: this.logOut,
+      notifications: notificationsList,
+      courses: coursesList,
     };
   }
 
@@ -80,6 +122,18 @@ class App extends Component {
     });
   }
 
+  markNotificationAsRead(id) {
+    console.log(
+      `Notification ${id} has been marked as read`
+    );
+
+    this.setState({
+      notifications: this.state.notifications.filter(
+        (notification) => notification.id !== id
+      ),
+    });
+  }
+
   handleKeyDown(event) {
     if (
       'ctrlKey' in event &&
@@ -97,45 +151,9 @@ class App extends Component {
     const {
       displayDrawer,
       user,
+      notifications,
+      courses,
     } = this.state;
-
-    const notificationsList = [
-      {
-        id: 1,
-        type: 'default',
-        value: 'New course available',
-      },
-      {
-        id: 2,
-        type: 'urgent',
-        value: 'New resume available',
-      },
-      {
-        id: 3,
-        type: 'urgent',
-        html: {
-          __html: getLatestNotification(),
-        },
-      },
-    ];
-
-    const coursesList = [
-      {
-        id: 1,
-        name: 'ES6',
-        credit: 60,
-      },
-      {
-        id: 2,
-        name: 'Webpack',
-        credit: 20,
-      },
-      {
-        id: 3,
-        name: 'React',
-        credit: 40,
-      },
-    ];
 
     return (
       <NewContext.Provider value={this.state}>
@@ -143,7 +161,10 @@ class App extends Component {
           <div className="root-notifications relative w-full">
             <Notifications
               displayDrawer={displayDrawer}
-              notifications={notificationsList}
+              notifications={notifications}
+              markNotificationAsRead={
+                this.markNotificationAsRead
+              }
               handleDisplayDrawer={
                 this.handleDisplayDrawer
               }
@@ -160,7 +181,7 @@ class App extends Component {
               <BodySectionWithMarginBottom
                 title="Course list"
               >
-                <CourseList courses={coursesList} />
+                <CourseList courses={courses} />
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom

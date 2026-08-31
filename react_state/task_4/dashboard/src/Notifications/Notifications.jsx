@@ -1,31 +1,14 @@
-import React, {
-  Component,
-  Fragment,
-} from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import closeIcon from '../assets/close-button.png';
 import NotificationItem from './NotificationItem';
 
-class Notifications extends Component {
+class Notifications extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.handleCloseClick =
       this.handleCloseClick.bind(this);
-    this.markAsRead = this.markAsRead.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    const {
-      notifications,
-      displayDrawer,
-    } = this.props;
-
-    return (
-      nextProps.notifications.length !==
-        notifications.length ||
-      nextProps.displayDrawer !== displayDrawer
-    );
   }
 
   handleCloseClick() {
@@ -35,17 +18,12 @@ class Notifications extends Component {
     handleHideDrawer();
   }
 
-  markAsRead(id) {
-    console.log(
-      `Notification ${id} has been marked as read`
-    );
-  }
-
   render() {
     const {
       notifications,
       displayDrawer,
       handleDisplayDrawer,
+      markNotificationAsRead,
     } = this.props;
 
     const titleAnimationClass =
@@ -99,7 +77,7 @@ class Notifications extends Component {
                         value={notification.value}
                         html={notification.html}
                         markAsRead={
-                          this.markAsRead
+                          markNotificationAsRead
                         }
                       />
                     )
@@ -119,6 +97,7 @@ Notifications.defaultProps = {
   displayDrawer: false,
   handleDisplayDrawer: () => {},
   handleHideDrawer: () => {},
+  markNotificationAsRead: () => {},
 };
 
 Notifications.propTypes = {
@@ -135,6 +114,7 @@ Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
   handleDisplayDrawer: PropTypes.func,
   handleHideDrawer: PropTypes.func,
+  markNotificationAsRead: PropTypes.func,
 };
 
 export default Notifications;
