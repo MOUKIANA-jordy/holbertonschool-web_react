@@ -12,7 +12,9 @@ import Footer from '../Footer/Footer';
 import CourseList from '../CourseList/CourseList';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
-import NewContext from '../Context/context';
+import NewContext, {
+  user as contextUser,
+} from '../Context/context';
 import { getLatestNotification } from '../utils/utils';
 
 export const notificationsList = [
@@ -53,19 +55,13 @@ export const coursesList = [
   },
 ];
 
-const defaultUser = {
-  email: '',
-  password: '',
-  isLoggedIn: false,
-};
-
 function App() {
   const [
     displayDrawer,
     setDisplayDrawer,
   ] = useState(true);
 
-  const [user, setUser] = useState(defaultUser);
+  const [user, setUser] = useState(contextUser);
 
   const [
     notifications,
@@ -90,9 +86,7 @@ function App() {
 
   const logOut = () => {
     setUser({
-      email: '',
-      password: '',
-      isLoggedIn: false,
+      ...contextUser,
     });
   };
 
