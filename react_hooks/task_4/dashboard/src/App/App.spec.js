@@ -226,3 +226,4 @@ describe('App component', () => {
     expect(coursesList).toHaveLength(3);
   });
 });
+
