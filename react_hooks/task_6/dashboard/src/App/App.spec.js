@@ -49,9 +49,7 @@ const courses = [
 async function respondWithNotifications() {
   await act(async () => {
     mockAxios.mockResponse({
-      data: {
-        notifications,
-      },
+      data: notifications,
     });
   });
 }
@@ -182,9 +180,7 @@ describe('App component', () => {
 
     await act(async () => {
       mockAxios.mockResponse({
-        data: {
-          courses,
-        },
+        data: courses,
       });
     });
 
@@ -204,9 +200,7 @@ describe('App component', () => {
 
     await act(async () => {
       mockAxios.mockResponse({
-        data: {
-          courses,
-        },
+        data: courses,
       });
     });
 
