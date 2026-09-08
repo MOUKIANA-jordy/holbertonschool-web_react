@@ -1,5 +1,4 @@
-{
-  "courses": [
+[
     {
       "id": 1,
       "name": "ES6",
@@ -15,5 +14,5 @@
       "name": "React",
       "credit": 40
     }
-  ]
-}
+]
+

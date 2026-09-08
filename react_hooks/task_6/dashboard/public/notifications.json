@@ -1,5 +1,4 @@
-{
-  "notifications": [
+[
     {
       "id": 1,
       "type": "default",
@@ -17,6 +16,5 @@
         "__html": ""
       }
     }
-  ]
-}
+]
 
