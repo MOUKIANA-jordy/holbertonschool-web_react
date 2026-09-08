@@ -1,6 +1,9 @@
-/* eslint-disable react-refresh/only-export-components */
-
-import { useCallback, useState } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+import axios from 'axios';
 
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
@@ -14,44 +17,6 @@ import NewContext, {
 } from '../Context/context';
 import { getLatestNotification } from '../utils/utils';
 
-export const notificationsList = [
-  {
-    id: 1,
-    type: 'default',
-    value: 'New course available',
-  },
-  {
-    id: 2,
-    type: 'urgent',
-    value: 'New resume available',
-  },
-  {
-    id: 3,
-    type: 'urgent',
-    html: {
-      __html: getLatestNotification(),
-    },
-  },
-];
-
-export const coursesList = [
-  {
-    id: 1,
-    name: 'ES6',
-    credit: 60,
-  },
-  {
-    id: 2,
-    name: 'Webpack',
-    credit: 20,
-  },
-  {
-    id: 3,
-    name: 'React',
-    credit: 40,
-  },
-];
-
 export default function App() {
   const [displayDrawer, setDisplayDrawer] =
     useState(true);
@@ -59,7 +24,81 @@ export default function App() {
   const [user, setUser] = useState(contextUser);
 
   const [notifications, setNotifications] =
-    useState(notificationsList);
+    useState([]);
+
+  const [courses, setCourses] = useState([]);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchNotifications = async () => {
+      try {
+        const response = await axios.get(
+          '/notifications.json'
+        );
+
+        const loadedNotifications =
+          response.data.notifications.map(
+            (notification) =>
+              notification.id === 3
+                ? {
+                    ...notification,
+                    html: {
+                      __html:
+                        getLatestNotification(),
+                    },
+                  }
+                : notification
+          );
+
+        if (isActive) {
+          setNotifications(loadedNotifications);
+        }
+    } catch (error) {
+      console.error(
+        'Error fetching notifications:',
+        error
+      );
+      }
+    };
+
+    fetchNotifications();
+
+    return () => {
+      isActive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    let isActive = true;
+
+    const fetchCourses = async () => {
+      try {
+        const response = await axios.get(
+          '/courses.json'
+        );
+
+        if (isActive) {
+          setCourses(response.data.courses);
+        }
+    } catch (error) {
+      console.error(
+        'Error fetching courses:',
+        error
+      );
+      }
+    };
+
+    if (user.isLoggedIn) {
+      fetchCourses();
+    } else {
+      setCourses([]);
+    }
+
+    return () => {
+      isActive = false;
+    };
+  }, [user]);
 
   const handleDisplayDrawer = useCallback(() => {
     setDisplayDrawer(true);
@@ -127,7 +166,7 @@ export default function App() {
               title="Course list"
             >
               <CourseList
-                courses={coursesList}
+                courses={courses}
               />
             </BodySectionWithMarginBottom>
           ) : (
@@ -154,4 +193,3 @@ export default function App() {
     </NewContext.Provider>
   );
 }
-
