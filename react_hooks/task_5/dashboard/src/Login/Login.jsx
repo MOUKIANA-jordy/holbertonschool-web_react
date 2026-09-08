@@ -25,7 +25,7 @@ function Login({ logIn = () => {} }) {
         onSubmit={handleLoginSubmit}
       >
         <label htmlFor="email">
-          Email:
+          Email
         </label>
 
         <input
@@ -41,7 +41,7 @@ function Login({ logIn = () => {} }) {
           className="ml-2 max-[600px]:ml-0"
           htmlFor="password"
         >
-          Password:
+          Password
         </label>
 
         <input
