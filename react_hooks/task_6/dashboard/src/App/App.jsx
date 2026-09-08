@@ -1,4 +1,8 @@
-import { useCallback, useEffect, useReducer } from 'react';
+import {
+  useCallback,
+  useEffect,
+  useReducer,
+} from 'react';
 import axios from 'axios';
 
 import Notifications from '../Notifications/Notifications';
@@ -9,27 +13,52 @@ import CourseList from '../CourseList/CourseList';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import { getLatestNotification } from '../utils/utils';
-import { APP_ACTIONS, appReducer, initialState } from './appReducer';
+import {
+  APP_ACTIONS,
+  appReducer,
+  initialState,
+} from './appReducer';
 
 export default function App() {
-  const [state, dispatch] = useReducer(appReducer, initialState);
-  const { displayDrawer, user, notifications, courses } = state;
+  const [state, dispatch] = useReducer(
+    appReducer,
+    initialState
+  );
+
+  const {
+    displayDrawer,
+    user,
+    notifications,
+    courses,
+  } = state;
 
   useEffect(() => {
     let isActive = true;
 
     const fetchNotifications = async () => {
       try {
-        const response = await axios.get('/notifications.json');
-        const loadedNotifications = response.data.notifications.map(
-          (notification) =>
+        const response = await axios.get(
+          '/notifications.json'
+        );
+
+        const notificationsData = Array.isArray(
+          response.data
+        )
+          ? response.data
+          : response.data.notifications;
+
+        const loadedNotifications =
+          notificationsData.map((notification) =>
             notification.id === 3
               ? {
                   ...notification,
-                  html: { __html: getLatestNotification() },
+                  html: {
+                    __html:
+                      getLatestNotification(),
+                  },
                 }
               : notification
-        );
+          );
 
         if (isActive) {
           dispatch({
@@ -38,7 +67,10 @@ export default function App() {
           });
         }
       } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error(
+          'Error fetching notifications:',
+          error
+        );
       }
     };
 
@@ -54,16 +86,27 @@ export default function App() {
 
     const fetchCourses = async () => {
       try {
-        const response = await axios.get('/courses.json');
+        const response = await axios.get(
+          '/courses.json'
+        );
+
+        const coursesData = Array.isArray(
+          response.data
+        )
+          ? response.data
+          : response.data.courses;
 
         if (isActive) {
           dispatch({
             type: APP_ACTIONS.SET_COURSES,
-            payload: response.data.courses,
+            payload: coursesData,
           });
         }
       } catch (error) {
-        console.error('Error fetching courses:', error);
+        console.error(
+          'Error fetching courses:',
+          error
+        );
       }
     };
 
@@ -81,32 +124,51 @@ export default function App() {
     };
   }, [user.isLoggedIn]);
 
-  const handleDisplayDrawer = useCallback(() => {
-    dispatch({ type: APP_ACTIONS.TOGGLE_DRAWER });
-  }, []);
+  const handleDisplayDrawer =
+    useCallback(() => {
+      dispatch({
+        type: APP_ACTIONS.TOGGLE_DRAWER,
+      });
+    }, []);
 
   const handleHideDrawer = useCallback(() => {
-    dispatch({ type: APP_ACTIONS.TOGGLE_DRAWER });
-  }, []);
-
-  const logIn = useCallback((email, password) => {
     dispatch({
-      type: APP_ACTIONS.LOGIN,
-      payload: { email, password },
+      type: APP_ACTIONS.TOGGLE_DRAWER,
     });
   }, []);
+
+  const logIn = useCallback(
+    (email, password) => {
+      dispatch({
+        type: APP_ACTIONS.LOGIN,
+        payload: {
+          email,
+          password,
+        },
+      });
+    },
+    []
+  );
 
   const logOut = useCallback(() => {
-    dispatch({ type: APP_ACTIONS.LOGOUT });
+    dispatch({
+      type: APP_ACTIONS.LOGOUT,
+    });
   }, []);
 
-  const markNotificationAsRead = useCallback((id) => {
-    dispatch({
-      type: APP_ACTIONS.MARK_NOTIFICATION_READ,
-      payload: id,
-    });
-    console.log(`Notification ${id} has been marked as read`);
-  }, []);
+  const markNotificationAsRead = useCallback(
+    (id) => {
+      dispatch({
+        type: APP_ACTIONS.MARK_NOTIFICATION_READ,
+        payload: id,
+      });
+
+      console.log(
+        `Notification ${id} has been marked as read`
+      );
+    },
+    []
+  );
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -114,9 +176,13 @@ export default function App() {
         <Notifications
           displayDrawer={displayDrawer}
           notifications={notifications}
-          handleDisplayDrawer={handleDisplayDrawer}
+          handleDisplayDrawer={
+            handleDisplayDrawer
+          }
           handleHideDrawer={handleHideDrawer}
-          markNotificationAsRead={markNotificationAsRead}
+          markNotificationAsRead={
+            markNotificationAsRead
+          }
         />
       </div>
 
@@ -124,17 +190,23 @@ export default function App() {
 
       <main className="App-content flex-1 px-6 py-8 max-[520px]:px-3">
         {user.isLoggedIn ? (
-          <BodySectionWithMarginBottom title="Course list">
+          <BodySectionWithMarginBottom
+            title="Course list"
+          >
             <CourseList courses={courses} />
           </BodySectionWithMarginBottom>
         ) : (
-          <BodySectionWithMarginBottom title="Log in to continue">
+          <BodySectionWithMarginBottom
+            title="Log in to continue"
+          >
             <Login logIn={logIn} />
           </BodySectionWithMarginBottom>
         )}
 
         <BodySection title="News from the School">
-          <p>Holberton School News goes here</p>
+          <p>
+            Holberton School News goes here
+          </p>
         </BodySection>
       </main>
 
@@ -142,4 +214,3 @@ export default function App() {
     </div>
   );
 }
-

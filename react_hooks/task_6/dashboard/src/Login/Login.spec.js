@@ -48,7 +48,7 @@ describe('Login component', () => {
     render(<Login />);
 
     await user.click(
-      screen.getByText(/^email:$/i)
+      screen.getByText(/^email$/i)
     );
 
     expect(
@@ -62,7 +62,7 @@ describe('Login component', () => {
     render(<Login />);
 
     await user.click(
-      screen.getByText(/^password:$/i)
+      screen.getByText(/^password$/i)
     );
 
     expect(
