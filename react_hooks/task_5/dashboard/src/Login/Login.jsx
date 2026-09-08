@@ -1,66 +1,18 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 import WithLogging from '../HOC/WithLogging';
+import useLogin from '../hooks/useLogin';
 
 function Login({ logIn = () => {} }) {
-  const [enableSubmit, setEnableSubmit] =
-    useState(false);
-
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
-  const isEmailValid = (email) => {
-    const emailRegex =
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-    return emailRegex.test(email);
-  };
-
-  const updateSubmitState = (
+  const {
     email,
-    password
-  ) => {
-    setEnableSubmit(
-      isEmailValid(email) &&
-        password.length >= 8
-    );
-  };
-
-  const handleChangeEmail = (event) => {
-    const email = event.target.value;
-    const { password } = formData;
-
-    setFormData({
-      ...formData,
-      email,
-    });
-
-    updateSubmitState(email, password);
-  };
-
-  const handleChangePassword = (event) => {
-    const password = event.target.value;
-    const { email } = formData;
-
-    setFormData({
-      ...formData,
-      password,
-    });
-
-    updateSubmitState(email, password);
-  };
-
-  const handleLoginSubmit = (event) => {
-    event.preventDefault();
-
-    const { email, password } = formData;
-
-    logIn(email, password);
-  };
+    password,
+    enableSubmit,
+    handleChangeEmail,
+    handleChangePassword,
+    handleLoginSubmit,
+  } = useLogin(logIn);
 
   return (
     <div className="App-body min-h-[45vh] px-12 py-9 max-[912px]:px-5 max-[520px]:px-0 max-[520px]:py-5">
@@ -81,7 +33,7 @@ function Login({ logIn = () => {} }) {
           type="email"
           id="email"
           name="email"
-          value={formData.email}
+          value={email}
           onChange={handleChangeEmail}
         />
 
@@ -97,7 +49,7 @@ function Login({ logIn = () => {} }) {
           type="password"
           id="password"
           name="password"
-          value={formData.password}
+          value={password}
           onChange={handleChangePassword}
         />
 
@@ -118,4 +70,3 @@ Login.propTypes = {
 
 export { Login };
 export default WithLogging(Login);
-
