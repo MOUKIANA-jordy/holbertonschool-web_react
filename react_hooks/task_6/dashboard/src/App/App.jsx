@@ -128,12 +128,14 @@ export default function App() {
     useCallback(() => {
       dispatch({
         type: APP_ACTIONS.TOGGLE_DRAWER,
+      payload: true,
       });
     }, []);
 
   const handleHideDrawer = useCallback(() => {
     dispatch({
       type: APP_ACTIONS.TOGGLE_DRAWER,
+      payload: false,
     });
   }, []);
 

@@ -38,7 +38,10 @@ export function appReducer(state = initialState, action) {
     case APP_ACTIONS.TOGGLE_DRAWER:
       return {
         ...state,
-        displayDrawer: !state.displayDrawer,
+        displayDrawer:
+          action.payload === undefined
+            ? !state.displayDrawer
+            : action.payload,
       };
     case APP_ACTIONS.MARK_NOTIFICATION_READ:
       return {
