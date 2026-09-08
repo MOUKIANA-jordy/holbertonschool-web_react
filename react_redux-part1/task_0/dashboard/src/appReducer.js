@@ -1,0 +1,75 @@
+export const APP_ACTIONS = {
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
+  SET_DRAWER: 'SET_DRAWER',
+  SET_NOTIFICATIONS: 'SET_NOTIFICATIONS',
+  MARK_NOTIFICATION_READ: 'MARK_NOTIFICATION_READ',
+  SET_COURSES: 'SET_COURSES',
+};
+
+export const initialState = {
+  displayDrawer: true,
+  user: {
+    email: '',
+    password: '',
+    isLoggedIn: false,
+  },
+  notifications: [],
+  courses: [],
+};
+
+export default function appReducer(
+  state = initialState,
+  action
+) {
+  switch (action.type) {
+    case APP_ACTIONS.LOGIN:
+      return {
+        ...state,
+        user: {
+          email: action.payload.email,
+          password: action.payload.password,
+          isLoggedIn: true,
+        },
+      };
+
+    case APP_ACTIONS.LOGOUT:
+      return {
+        ...state,
+        user: {
+          ...initialState.user,
+        },
+        courses: [],
+      };
+
+    case APP_ACTIONS.SET_DRAWER:
+      return {
+        ...state,
+        displayDrawer: action.payload,
+      };
+
+    case APP_ACTIONS.SET_NOTIFICATIONS:
+      return {
+        ...state,
+        notifications: action.payload,
+      };
+
+    case APP_ACTIONS.MARK_NOTIFICATION_READ:
+      return {
+        ...state,
+        notifications: state.notifications.filter(
+          (notification) =>
+            notification.id !== action.payload
+        ),
+      };
+
+    case APP_ACTIONS.SET_COURSES:
+      return {
+        ...state,
+        courses: action.payload,
+      };
+
+    default:
+      return state;
+  }
+}
