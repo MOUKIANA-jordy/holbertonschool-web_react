@@ -27,6 +27,7 @@ function Notifications({
   };
 
   const titleClasses = [
+    'menuItem',
     'notification-title',
     'ml-auto',
     'mr-5',
@@ -58,7 +59,7 @@ function Notifications({
       </div>
 
       {displayDrawer && (
-        <div className="notification-items relative ml-auto mr-5 w-1/4 border-2 border-dashed border-[var(--main-color)] p-1.5 max-[912px]:fixed max-[912px]:inset-0 max-[912px]:z-50 max-[912px]:m-0 max-[912px]:h-screen max-[912px]:w-screen max-[912px]:overflow-auto max-[912px]:bg-white max-[912px]:p-3">
+        <div className="Notifications notification-items relative ml-auto mr-5 w-1/4 border-2 border-dashed border-[var(--main-color)] p-1.5 max-[912px]:fixed max-[912px]:inset-0 max-[912px]:z-50 max-[912px]:m-0 max-[912px]:h-screen max-[912px]:w-screen max-[912px]:overflow-auto max-[912px]:bg-white max-[912px]:p-3">
           <button
             type="button"
             className="close-button absolute right-2 top-2 cursor-pointer border-0 bg-transparent"
@@ -68,7 +69,7 @@ function Notifications({
             <img
               className="h-4 w-4"
               src={closeIcon}
-              alt="close"
+              alt="close icon"
             />
           </button>
 
