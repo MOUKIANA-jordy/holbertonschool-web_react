@@ -148,3 +148,4 @@ export default memo(
   Notifications,
   areNotificationsPropsEqual
 );
+

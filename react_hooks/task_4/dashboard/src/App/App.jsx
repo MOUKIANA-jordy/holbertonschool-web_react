@@ -52,7 +52,7 @@ export const coursesList = [
   },
 ];
 
-export default function App() {
+function App() {
   const [displayDrawer, setDisplayDrawer] =
     useState(true);
 
@@ -154,4 +154,7 @@ export default function App() {
     </NewContext.Provider>
   );
 }
+
+export { App };
+export default App;
 

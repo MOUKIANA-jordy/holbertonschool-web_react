@@ -67,3 +67,4 @@ describe('WithLogging HOC', () => {
     );
   });
 });
+

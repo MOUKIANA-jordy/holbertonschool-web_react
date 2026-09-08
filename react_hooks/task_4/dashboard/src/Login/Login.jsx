@@ -4,7 +4,7 @@ import { useState } from 'react';
 import PropTypes from 'prop-types';
 import WithLogging from '../HOC/WithLogging';
 
-function Login({ logIn }) {
+function Login({ logIn = () => {} }) {
   const [enableSubmit, setEnableSubmit] =
     useState(false);
 
@@ -112,13 +112,10 @@ function Login({ logIn }) {
   );
 }
 
-Login.defaultProps = {
-  logIn: () => {},
-};
-
 Login.propTypes = {
   logIn: PropTypes.func,
 };
 
 export { Login };
 export default WithLogging(Login);
+

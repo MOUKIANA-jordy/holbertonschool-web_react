@@ -59,3 +59,4 @@ CourseList.propTypes = {
 };
 
 export default WithLogging(CourseList);
+

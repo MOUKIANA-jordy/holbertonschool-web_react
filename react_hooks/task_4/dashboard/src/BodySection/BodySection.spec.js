@@ -57,3 +57,4 @@ describe('BodySection component', () => {
     ).toBeInTheDocument();
   });
 });
+

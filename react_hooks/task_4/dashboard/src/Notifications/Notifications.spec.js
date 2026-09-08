@@ -279,3 +279,4 @@ describe('Notifications component', () => {
     ).toBe(false);
   });
 });
+

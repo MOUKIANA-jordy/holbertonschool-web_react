@@ -31,3 +31,4 @@ function WithLogging(WrappedComponent) {
 }
 
 export default WithLogging;
+
