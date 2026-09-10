@@ -73,11 +73,14 @@ describe('notificationsSlice', () => {
     expect(result.payload[2]).toEqual(
       expect.objectContaining({
         id: 3,
+        type: 'urgent',
         html: {
           __html: expect.any(String),
         },
       })
     );
+
+    expect(result.payload[2]).not.toHaveProperty('value');
   });
 
   test('Should remove a notification correctly', () => {
