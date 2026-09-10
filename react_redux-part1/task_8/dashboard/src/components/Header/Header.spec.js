@@ -1,55 +1,106 @@
-import { render, screen } from '@testing-library/react';
+import {
+  render,
+  screen,
+} from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
-import Footer from './Footer';
-import authReducer from '../../features/auth/authSlice';
+import Header from './Header';
+import authReducer, {
+  login,
+} from '../../features/auth/authSlice';
 
-const renderWithStore = (isLoggedIn = false) => {
-  const store = configureStore({
+function createTestStore() {
+  return configureStore({
     reducer: {
       auth: authReducer,
     },
-    preloadedState: {
-      auth: {
-        user: {
-          email: isLoggedIn ? 'test@example.com' : '',
-          password: '',
-        },
-        isLoggedIn,
-      },
-    },
   });
+}
 
+function renderWithStore(store) {
   return render(
     <Provider store={store}>
-      <Footer />
+      <Header />
     </Provider>
   );
-};
+}
 
-describe('Footer component', () => {
-  test('renders the copyright text', () => {
-    renderWithStore();
+describe('Header component', () => {
+  test('renders the Header component', () => {
+    const store = createTestStore();
+
+    renderWithStore(store);
 
     expect(
-      screen.getByText(/Copyright/i)
+      screen.getByText('School dashboard')
     ).toBeInTheDocument();
   });
 
-  test('does not display Contact us when user is logged out', () => {
-    renderWithStore(false);
+  test('displays logout link when user is logged in', () => {
+    const store = createTestStore();
+
+    store.dispatch(
+      login({
+        email: 'test@example.com',
+        password: 'password123',
+      })
+    );
+
+    renderWithStore(store);
 
     expect(
-      screen.queryByText(/Contact us/i)
-    ).not.toBeInTheDocument();
+      screen.getByRole('link', {
+        name: /logout/i,
+      })
+    ).toBeInTheDocument();
   });
 
-  test('displays Contact us when user is logged in', () => {
-    renderWithStore(true);
+  test('displays welcome message with user email', () => {
+    const store = createTestStore();
+
+    store.dispatch(
+      login({
+        email: 'test@example.com',
+        password: 'password123',
+      })
+    );
+
+    renderWithStore(store);
 
     expect(
-      screen.getByText(/Contact us/i)
+      screen.getByText(
+        /test@example\.com/i
+      )
     ).toBeInTheDocument();
+  });
+
+  test('logs user out when logout link is clicked', async () => {
+    const user = userEvent.setup();
+    const store = createTestStore();
+
+    store.dispatch(
+      login({
+        email: 'test@example.com',
+        password: 'password123',
+      })
+    );
+
+    renderWithStore(store);
+
+    expect(
+      store.getState().auth.isLoggedIn
+    ).toBe(true);
+
+    await user.click(
+      screen.getByRole('link', {
+        name: /logout/i,
+      })
+    );
+
+    expect(
+      store.getState().auth.isLoggedIn
+    ).toBe(false);
   });
 });

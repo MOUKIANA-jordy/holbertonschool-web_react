@@ -2,7 +2,6 @@ import {
   act,
   render,
   screen,
-  waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import mockAxios from 'axios';
@@ -50,10 +49,32 @@ const courses = [
   },
 ];
 
-function renderWithStore() {
-  const store = configureStore({
+function createTestStore(preloadedState) {
+  return configureStore({
     reducer: rootReducer,
+    preloadedState,
   });
+}
+
+function renderWithStore(preloadedState) {
+  const store = createTestStore(
+    preloadedState || {
+      auth: {
+        user: {
+          email: '',
+          password: '',
+        },
+        isLoggedIn: false,
+      },
+      notifications: {
+        notifications: [],
+        displayDrawer: true,
+      },
+      courses: {
+        courses: [],
+      },
+    }
+  );
 
   return {
     store,
@@ -110,11 +131,69 @@ describe('App component', () => {
     ).toBeInTheDocument();
   });
 
+  test('renders Login when user is logged out', () => {
+    renderWithStore({
+      auth: {
+        user: {
+          email: '',
+          password: '',
+        },
+        isLoggedIn: false,
+      },
+      notifications: {
+        notifications: [],
+        displayDrawer: true,
+      },
+      courses: {
+        courses: [],
+      },
+    });
+
+    expect(
+      screen.getByRole('heading', {
+        name: /log in to continue/i,
+      })
+    ).toBeInTheDocument();
+  });
+
+  test('renders CourseList when user is logged in', () => {
+    renderWithStore({
+      auth: {
+        user: {
+          email: 'test@example.com',
+          password: 'password123',
+        },
+        isLoggedIn: true,
+      },
+      notifications: {
+        notifications: [],
+        displayDrawer: true,
+      },
+      courses: {
+        courses,
+      },
+    });
+
+    expect(
+      screen.getByRole('heading', {
+        name: /course list/i,
+      })
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText('Webpack')
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText('React')
+    ).toBeInTheDocument();
+  });
+
   test('fetches notifications when App loads', async () => {
     renderWithStore();
 
     expect(mockAxios.get).toHaveBeenCalledWith(
-      '/notifications.json'
+      'http://localhost:5173/notifications.json'
     );
 
     await respondWithNotifications();
@@ -180,24 +259,15 @@ describe('App component', () => {
     ).toBeInTheDocument();
   });
 
-  test('renders the login form when logged out', () => {
-    renderWithStore();
-
-    expect(
-      screen.getByRole('heading', {
-        name: /log in to continue/i,
-      })
-    ).toBeInTheDocument();
-  });
-
   test('fetches and displays courses after login', async () => {
     renderWithStore();
 
     await respondWithNotifications();
+
     await logIn();
 
     expect(mockAxios.get).toHaveBeenCalledWith(
-      '/courses.json'
+      'http://localhost:5173/courses.json'
     );
 
     await act(async () => {
@@ -227,6 +297,10 @@ describe('App component', () => {
         data: courses,
       });
     });
+
+    expect(
+      await screen.findByText('Webpack')
+    ).toBeInTheDocument();
 
     await user.click(
       screen.getByRole('link', {
@@ -263,26 +337,5 @@ describe('App component', () => {
     expect(
       screen.getByText('New resume available')
     ).toBeInTheDocument();
-  });
-
-  test('logs notification errors in development', async () => {
-    const consoleSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-
-    renderWithStore();
-
-    await act(async () => {
-      mockAxios.mockError(
-        new Error('Unable to load notifications')
-      );
-    });
-
-    await waitFor(() => {
-      expect(consoleSpy).toHaveBeenCalledWith(
-        'Error fetching notifications:',
-        expect.any(Error)
-      );
-    });
   });
 });

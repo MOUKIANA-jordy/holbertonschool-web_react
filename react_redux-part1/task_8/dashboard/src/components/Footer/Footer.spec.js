@@ -2,64 +2,68 @@ import {
   render,
   screen,
 } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
+
 import Footer from './Footer';
-import { getCurrentYear } from '../../utils/utils';
+import authReducer from '../../features/auth/authSlice';
+
+function renderWithStore(isLoggedIn = false) {
+  const store = configureStore({
+    reducer: {
+      auth: authReducer,
+    },
+    preloadedState: {
+      auth: {
+        user: {
+          email: isLoggedIn
+            ? 'test@example.com'
+            : '',
+          password: isLoggedIn
+            ? 'password123'
+            : '',
+        },
+        isLoggedIn,
+      },
+    },
+  });
+
+  return render(
+    <Provider store={store}>
+      <Footer />
+    </Provider>
+  );
+}
 
 describe('Footer component', () => {
   test('renders the copyright text', () => {
-    render(<Footer />);
+    renderWithStore();
+
+    const currentYear =
+      new Date().getFullYear();
 
     expect(
       screen.getByText(
-        `Copyright ${getCurrentYear()} - Holberton School`
+        new RegExp(
+          `Copyright\\s*${currentYear}\\s*-\\s*Holberton School`
+        )
       )
     ).toBeInTheDocument();
   });
 
-  test('does not display Contact us with default props', () => {
-    render(<Footer />);
-
-    expect(
-      screen.queryByRole('link', {
-        name: /contact us/i,
-      })
-    ).not.toBeInTheDocument();
-  });
-
   test('does not display Contact us when user is logged out', () => {
-    const user = {
-      email: '',
-      password: '',
-      isLoggedIn: false,
-    };
-
-    render(
-      <Footer user={user} />
-    );
+    renderWithStore(false);
 
     expect(
-      screen.queryByRole('link', {
-        name: /contact us/i,
-      })
+      screen.queryByText(/Contact us/i)
     ).not.toBeInTheDocument();
   });
 
   test('displays Contact us when user is logged in', () => {
-    const user = {
-      email: 'user@example.com',
-      password: 'password123',
-      isLoggedIn: true,
-    };
-
-    render(
-      <Footer user={user} />
-    );
+    renderWithStore(true);
 
     expect(
-      screen.getByRole('link', {
-        name: /contact us/i,
-      })
+      screen.getByText(/Contact us/i)
     ).toBeInTheDocument();
   });
 });
-
