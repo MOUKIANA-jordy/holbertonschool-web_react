@@ -3,14 +3,19 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Notifications from './components/Notifications/Notifications';
 import Header from './components/Header/Header';
-import Footer from './components/Footer/Footer';
 import Login from './pages/Login/Login';
+import Footer from './components/Footer/Footer';
 import CourseList from './pages/CourseList/CourseList';
 import BodySection from './components/BodySection/BodySection';
 import BodySectionWithMarginBottom from './components/BodySectionWithMarginBottom/BodySectionWithMarginBottom';
 
-import { fetchNotifications } from './features/notifications/notificationsSlice';
-import { fetchCourses } from './features/courses/coursesSlice';
+import {
+  fetchNotifications,
+} from './features/notifications/notificationsSlice';
+
+import {
+  fetchCourses,
+} from './features/courses/coursesSlice';
 
 function App() {
   const dispatch = useDispatch();
