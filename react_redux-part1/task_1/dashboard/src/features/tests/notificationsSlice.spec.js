@@ -8,17 +8,17 @@ describe('notificationsSlice', () => {
   });
 
   test('Should return the initial state by default', () => {
-    expect(
-      notificationsReducer(undefined, { type: 'unknown' })
-    ).toEqual({
+    const state = notificationsReducer(undefined, {
+      type: 'unknown',
+    });
+
+    expect(state).toEqual({
       notifications: [],
       displayDrawer: true,
     });
   });
 
   test('Should fetch notifications data correctly', async () => {
-    const dispatch = jest.fn();
-
     const notifications = [
       {
         id: 1,
@@ -37,13 +37,24 @@ describe('notificationsSlice', () => {
       },
     ];
 
-    const promise = fetchNotifications()(dispatch, () => ({}), undefined);
+    const dispatch = jest.fn();
+    const getState = jest.fn(() => ({}));
+
+    const promise = fetchNotifications()(
+      dispatch,
+      getState,
+      undefined
+    );
 
     mockAxios.mockResponse({
       data: notifications,
     });
 
     const result = await promise;
+
+    expect(mockAxios.get).toHaveBeenCalledWith(
+      'http://localhost:5173/notifications.json'
+    );
 
     expect(result.payload).toHaveLength(3);
 
@@ -59,8 +70,14 @@ describe('notificationsSlice', () => {
       value: 'New resume available',
     });
 
-    expect(result.payload[2].id).toBe(3);
-    expect(result.payload[2].value).not.toBe('Old notification');
+    expect(result.payload[2]).toEqual(
+      expect.objectContaining({
+        id: 3,
+        html: {
+          __html: expect.any(String),
+        },
+      })
+    );
   });
 
   test('Should remove a notification correctly', () => {
@@ -115,7 +132,10 @@ describe('notificationsSlice', () => {
       showDrawer()
     );
 
-    expect(state.displayDrawer).toBe(true);
+    expect(state).toEqual({
+      notifications: [],
+      displayDrawer: true,
+    });
   });
 
   test('Should hide the notifications drawer', () => {
@@ -129,6 +149,9 @@ describe('notificationsSlice', () => {
       hideDrawer()
     );
 
-    expect(state.displayDrawer).toBe(false);
+    expect(state).toEqual({
+      notifications: [],
+      displayDrawer: false,
+    });
   });
 });
