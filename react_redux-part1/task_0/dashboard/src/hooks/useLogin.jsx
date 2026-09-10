@@ -1,20 +1,17 @@
 import { useState } from 'react';
 
 const isEmailValid = (email) => {
-  const emailRegex =
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   return emailRegex.test(email);
 };
 
-export default function useLogin(onLogin) {
+function useLogin(onLogin) {
   const [email, setEmail] = useState('');
-  const [password, setPassword] =
-    useState('');
+  const [password, setPassword] = useState('');
 
   const enableSubmit =
-    isEmailValid(email) &&
-    password.length >= 8;
+    isEmailValid(email) && password.length >= 8;
 
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
@@ -41,3 +38,5 @@ export default function useLogin(onLogin) {
     handleLoginSubmit,
   };
 }
+
+export default useLogin;

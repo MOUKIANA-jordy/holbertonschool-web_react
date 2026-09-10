@@ -1,68 +1,23 @@
 import {
+  useCallback,
   useEffect,
   useReducer,
 } from 'react';
 import axios from 'axios';
 
-import appReducer, {
+import Notifications from './components/Notifications/Notifications';
+import Header from './components/Header/Header';
+import Login from './pages/Login/Login';
+import Footer from './components/Footer/Footer';
+import CourseList from './pages/CourseList/CourseList';
+import BodySection from './components/BodySection/BodySection';
+import BodySectionWithMarginBottom from './components/BodySectionWithMarginBottom/BodySectionWithMarginBottom';
+import { getLatestNotification } from './utils/utils';
+import {
   APP_ACTIONS,
+  appReducer,
   initialState,
 } from './appReducer';
-import useLogin from './hooks/useLogin';
-import {
-  getCurrentYear,
-  getFooterCopy,
-  getLatestNotification,
-} from './utils/utils';
-
-function Login({ onLogin = () => {} }) {
-  const {
-    email,
-    password,
-    enableSubmit,
-    handleChangeEmail,
-    handleChangePassword,
-    handleLoginSubmit,
-  } = useLogin(onLogin);
-
-  return (
-    <form onSubmit={handleLoginSubmit}>
-      <p>
-        Login to access the full dashboard
-      </p>
-
-      <label htmlFor="email">
-        Email
-      </label>
-
-      <input
-        id="email"
-        name="email"
-        type="email"
-        value={email}
-        onChange={handleChangeEmail}
-      />
-
-      <label htmlFor="password">
-        Password
-      </label>
-
-      <input
-        id="password"
-        name="password"
-        type="password"
-        value={password}
-        onChange={handleChangePassword}
-      />
-
-      <input
-        type="submit"
-        value="OK"
-        disabled={!enableSubmit}
-      />
-    </form>
-  );
-}
 
 export default function App() {
   const [state, dispatch] = useReducer(
@@ -78,7 +33,7 @@ export default function App() {
   } = state;
 
   useEffect(() => {
-    let active = true;
+    let isActive = true;
 
     const fetchNotifications = async () => {
       try {
@@ -86,14 +41,14 @@ export default function App() {
           '/notifications.json'
         );
 
-        const data = Array.isArray(
+        const notificationsData = Array.isArray(
           response.data
         )
           ? response.data
           : response.data.notifications;
 
-        const loadedNotifications = data.map(
-          (notification) =>
+        const loadedNotifications =
+          notificationsData.map((notification) =>
             notification.id === 3
               ? {
                   ...notification,
@@ -103,12 +58,11 @@ export default function App() {
                   },
                 }
               : notification
-        );
+          );
 
-        if (active) {
+        if (isActive) {
           dispatch({
-            type:
-              APP_ACTIONS.SET_NOTIFICATIONS,
+            type: APP_ACTIONS.SET_NOTIFICATIONS,
             payload: loadedNotifications,
           });
         }
@@ -123,12 +77,12 @@ export default function App() {
     fetchNotifications();
 
     return () => {
-      active = false;
+      isActive = false;
     };
   }, []);
 
   useEffect(() => {
-    let active = true;
+    let isActive = true;
 
     const fetchCourses = async () => {
       try {
@@ -136,16 +90,16 @@ export default function App() {
           '/courses.json'
         );
 
-        const data = Array.isArray(
+        const coursesData = Array.isArray(
           response.data
         )
           ? response.data
           : response.data.courses;
 
-        if (active) {
+        if (isActive) {
           dispatch({
             type: APP_ACTIONS.SET_COURSES,
-            payload: data,
+            payload: coursesData,
           });
         }
       } catch (error) {
@@ -158,179 +112,107 @@ export default function App() {
 
     if (user.isLoggedIn) {
       fetchCourses();
+    } else {
+      dispatch({
+        type: APP_ACTIONS.SET_COURSES,
+        payload: [],
+      });
     }
 
     return () => {
-      active = false;
+      isActive = false;
     };
   }, [user.isLoggedIn]);
 
-  const logIn = (email, password) => {
+  const handleDisplayDrawer =
+    useCallback(() => {
+      dispatch({
+        type: APP_ACTIONS.TOGGLE_DRAWER,
+      payload: true,
+      });
+    }, []);
+
+  const handleHideDrawer = useCallback(() => {
     dispatch({
-      type: APP_ACTIONS.LOGIN,
-      payload: {
-        email,
-        password,
-      },
+      type: APP_ACTIONS.TOGGLE_DRAWER,
+      payload: false,
     });
-  };
+  }, []);
 
-  const logOut = (event) => {
-    event.preventDefault();
+  const logIn = useCallback(
+    (email, password) => {
+      dispatch({
+        type: APP_ACTIONS.LOGIN,
+        payload: {
+          email,
+          password,
+        },
+      });
+    },
+    []
+  );
 
+  const logOut = useCallback(() => {
     dispatch({
       type: APP_ACTIONS.LOGOUT,
     });
-  };
+  }, []);
 
-  const handleDisplayDrawer = () => {
-    dispatch({
-      type: APP_ACTIONS.SET_DRAWER,
-      payload: true,
-    });
-  };
+  const markNotificationAsRead = useCallback(
+    (id) => {
+      dispatch({
+        type: APP_ACTIONS.MARK_NOTIFICATION_READ,
+        payload: id,
+      });
 
-  const handleHideDrawer = () => {
-    dispatch({
-      type: APP_ACTIONS.SET_DRAWER,
-      payload: false,
-    });
-  };
-
-  const markNotificationAsRead = (id) => {
-    dispatch({
-      type:
-        APP_ACTIONS.MARK_NOTIFICATION_READ,
-      payload: id,
-    });
-  };
+      console.log(
+        `Notification ${id} has been marked as read`
+      );
+    },
+    []
+  );
 
   return (
-    <div>
-      <div
-        className="menuItem"
-        role="button"
-        tabIndex={0}
-        onClick={handleDisplayDrawer}
-        onKeyDown={(event) => {
-          if (
-            event.key === 'Enter' ||
-            event.key === ' '
-          ) {
-            handleDisplayDrawer();
+    <div className="flex min-h-screen flex-col">
+      <div className="root-notifications relative w-full">
+        <Notifications
+          displayDrawer={displayDrawer}
+          notifications={notifications}
+          handleDisplayDrawer={
+            handleDisplayDrawer
           }
-        }}
-      >
-        Your notifications
+          handleHideDrawer={handleHideDrawer}
+          markNotificationAsRead={
+            markNotificationAsRead
+          }
+        />
       </div>
 
-      {displayDrawer && (
-        <div className="Notifications">
-          <button
-            type="button"
-            aria-label="Close"
-            onClick={handleHideDrawer}
-          >
-            Close
-          </button>
+      <Header user={user} logOut={logOut} />
 
-          {notifications.length === 0 ? (
-            <p>
-              No new notification for now
-            </p>
-          ) : (
-            <>
-              <p>
-                Here is the list of
-                notifications
-              </p>
-
-              <ul>
-                {notifications.map(
-                  (notification) => (
-                    <li
-                      key={notification.id}
-                      data-notification-type={
-                        notification.type
-                      }
-                      onClick={() =>
-                        markNotificationAsRead(
-                          notification.id
-                        )
-                      }
-                    >
-                      {notification.value || (
-                        <span
-                          dangerouslySetInnerHTML={
-                            notification.html
-                          }
-                        />
-                      )}
-                    </li>
-                  )
-                )}
-              </ul>
-            </>
-          )}
-        </div>
-      )}
-
-      <header>
-        <h1>School dashboard</h1>
-
-        {user.isLoggedIn && (
-          <div id="logoutSection">
-            Welcome{' '}
-            <strong>{user.email}</strong>{' '}
-            <a
-              href="#logout"
-              onClick={logOut}
-            >
-              logout
-            </a>
-          </div>
-        )}
-      </header>
-
-      <main>
+      <main className="App-content flex-1 px-6 py-8 max-[520px]:px-3">
         {user.isLoggedIn ? (
-          <section>
-            <h2>Course list</h2>
-
-            {courses.length === 0 ? (
-              <p>
-                No course available yet
-              </p>
-            ) : (
-              <ul>
-                {courses.map((course) => (
-                  <li key={course.id}>
-                    {course.name}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </section>
+          <BodySectionWithMarginBottom
+            title="Course list"
+          >
+            <CourseList courses={courses} />
+          </BodySectionWithMarginBottom>
         ) : (
-          <section>
-            <h2>Log in to continue</h2>
-            <Login onLogin={logIn} />
-          </section>
+          <BodySectionWithMarginBottom
+            title="Log in to continue"
+          >
+            <Login logIn={logIn} />
+          </BodySectionWithMarginBottom>
         )}
+
+        <BodySection title="News from the School">
+          <p>
+            Holberton School News goes here
+          </p>
+        </BodySection>
       </main>
 
-      <footer>
-        <p>
-          Copyright {getCurrentYear()} -{' '}
-          {getFooterCopy(true)}
-        </p>
-
-        {user.isLoggedIn && (
-          <a href="mailto:contact@holbertonschool.com">
-            Contact us
-          </a>
-        )}
-      </footer>
+      <Footer user={user} />
     </div>
   );
 }
