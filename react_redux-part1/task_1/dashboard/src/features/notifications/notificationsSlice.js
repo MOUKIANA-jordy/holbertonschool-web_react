@@ -20,10 +20,12 @@ export const fetchNotifications = createAsyncThunk(
 
     const notifications = response.data.map((notification) => {
       if (notification.id === 3) {
-        const { value, ...rest } = notification;
+        const updatedNotification = { ...notification };
+
+        delete updatedNotification.value;
 
         return {
-          ...rest,
+          ...updatedNotification,
           html: {
             __html: getLatestNotification(),
           },
