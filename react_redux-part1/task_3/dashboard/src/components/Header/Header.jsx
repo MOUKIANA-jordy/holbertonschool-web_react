@@ -5,28 +5,29 @@ import { logout } from '../../features/auth/authSlice';
 function Header() {
   const dispatch = useDispatch();
 
-  const { isLoggedIn, user } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth.user);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
-  const handleLogout = (event) => {
-    event.preventDefault();
+  const handleLogout = () => {
     dispatch(logout());
   };
 
   return (
-    <header className="App-header">
-      <img src={logo} className="App-logo" alt="Holberton logo" />
-      <h1>School dashboard</h1>
+    <>
+      <div className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1>School dashboard</h1>
+      </div>
 
       {isLoggedIn && (
         <section id="logoutSection">
-          Welcome {user.email} (
+          Welcome <b>{user.email}</b>{' '}
           <a href="#" onClick={handleLogout}>
-            logout
+            (logout)
           </a>
-          )
         </section>
       )}
-    </header>
+    </>
   );
 }
 
