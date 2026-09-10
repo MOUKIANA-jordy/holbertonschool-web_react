@@ -1,7 +1,7 @@
 import authReducer, {
   login,
   logout,
-} from '../auth/authSlice';
+} from '../auth/authSlice.js';
 
 describe('authSlice', () => {
   test('Should return the initial state by default', () => {
