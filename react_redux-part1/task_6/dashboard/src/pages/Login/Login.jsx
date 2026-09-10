@@ -37,6 +37,7 @@ function Login() {
         <input
           type="email"
           id="email"
+          name="email"
           value={email}
           onChange={handleEmailChange}
         />
@@ -48,6 +49,7 @@ function Login() {
         <input
           type="password"
           id="password"
+          name="password"
           value={password}
           onChange={handlePasswordChange}
         />
