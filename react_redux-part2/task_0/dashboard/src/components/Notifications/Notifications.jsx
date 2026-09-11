@@ -1,14 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import {
-  memo,
-  useRef,
-} from 'react';
+import { memo, useRef } from 'react';
 import PropTypes from 'prop-types';
-import {
-  StyleSheet,
-  css,
-} from 'aphrodite';
+import { StyleSheet, css } from 'aphrodite';
 
 import closeIcon from '../../assets/close-icon.png';
 import NotificationItem from '../NotificationItem/NotificationItem';
@@ -20,10 +14,6 @@ function Notifications({
   const DrawerRef = useRef(null);
 
   const handleToggleDrawer = () => {
-    if (!DrawerRef.current) {
-      return;
-    }
-
     DrawerRef.current.classList.toggle(
       css(styles.visible)
     );
@@ -54,7 +44,7 @@ function Notifications({
       <div
         ref={DrawerRef}
         className={`${css(
-          styles.drawer
+          styles.notificationDrawer
         )} Notifications notification-items relative ml-auto mr-5 w-1/4 border-2 border-dashed border-[var(--main-color)] p-1.5 max-[912px]:fixed max-[912px]:inset-0 max-[912px]:z-50 max-[912px]:m-0 max-[912px]:h-screen max-[912px]:w-screen max-[912px]:overflow-auto max-[912px]:bg-white max-[912px]:p-3`}
       >
         <button
@@ -71,9 +61,7 @@ function Notifications({
         </button>
 
         {notifications.length === 0 ? (
-          <p>
-            No new notification for now
-          </p>
+          <p>No new notification for now</p>
         ) : (
           <>
             <p>
@@ -104,7 +92,7 @@ function Notifications({
 }
 
 export const styles = StyleSheet.create({
-  drawer: {
+  notificationDrawer: {
     opacity: 0,
     visibility: 'hidden',
   },
@@ -126,8 +114,7 @@ Notifications.propTypes = {
       }),
     })
   ),
-  markNotificationAsRead:
-    PropTypes.func,
+  markNotificationAsRead: PropTypes.func,
 };
 
 function areNotificationsPropsEqual(
@@ -137,8 +124,7 @@ function areNotificationsPropsEqual(
   return (
     previousProps.notifications ===
       nextProps.notifications &&
-    previousProps
-      .markNotificationAsRead ===
+    previousProps.markNotificationAsRead ===
       nextProps.markNotificationAsRead
   );
 }
