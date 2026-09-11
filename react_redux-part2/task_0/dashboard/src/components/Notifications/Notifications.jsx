@@ -1,8 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import { memo, useRef } from 'react';
+import {
+  memo,
+  useRef,
+} from 'react';
 import PropTypes from 'prop-types';
-import { StyleSheet, css } from 'aphrodite';
+import {
+  StyleSheet,
+  css,
+} from 'aphrodite';
 
 import closeIcon from '../../assets/close-icon.png';
 import NotificationItem from '../NotificationItem/NotificationItem';
@@ -15,9 +21,23 @@ function Notifications({
 
   const handleToggleDrawer = () => {
     if (DrawerRef.current) {
-      DrawerRef.current.classList.toggle(
-        css(styles.visible)
+      const visibleClass = css(
+        styles.visible
       );
+
+      if (
+        DrawerRef.current.classList.contains(
+          visibleClass
+        )
+      ) {
+        DrawerRef.current.classList.remove(
+          visibleClass
+        );
+      } else {
+        DrawerRef.current.classList.add(
+          visibleClass
+        );
+      }
     }
   };
 
@@ -76,7 +96,9 @@ function Notifications({
         </button>
 
         {notifications.length === 0 ? (
-          <p>No new notification for now</p>
+          <p>
+            No new notification for now
+          </p>
         ) : (
           <>
             <p>
@@ -90,8 +112,12 @@ function Notifications({
                     key={notification.id}
                     id={notification.id}
                     type={notification.type}
-                    value={notification.value}
-                    html={notification.html}
+                    value={
+                      notification.value
+                    }
+                    html={
+                      notification.html
+                    }
                     markAsRead={
                       markNotificationAsRead
                     }
@@ -106,17 +132,18 @@ function Notifications({
   );
 }
 
-export const styles = StyleSheet.create({
-  drawer: {
-    opacity: 0,
-    visibility: 'hidden',
-  },
+export const styles =
+  StyleSheet.create({
+    drawer: {
+      opacity: 0,
+      visibility: 'hidden',
+    },
 
-  visible: {
-    opacity: 1,
-    visibility: 'visible',
-  },
-});
+    visible: {
+      opacity: 1,
+      visibility: 'visible',
+    },
+  });
 
 Notifications.propTypes = {
   notifications: PropTypes.arrayOf(
@@ -129,7 +156,8 @@ Notifications.propTypes = {
       }),
     })
   ),
-  markNotificationAsRead: PropTypes.func,
+  markNotificationAsRead:
+    PropTypes.func,
 };
 
 function areNotificationsPropsEqual(
@@ -139,7 +167,8 @@ function areNotificationsPropsEqual(
   return (
     previousProps.notifications ===
       nextProps.notifications &&
-    previousProps.markNotificationAsRead ===
+    previousProps
+      .markNotificationAsRead ===
       nextProps.markNotificationAsRead
   );
 }
