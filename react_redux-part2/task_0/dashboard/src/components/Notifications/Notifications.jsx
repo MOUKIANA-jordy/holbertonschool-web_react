@@ -24,31 +24,7 @@ function Notifications({
       return;
     }
 
-    const visibleClass = css(
-      styles.visible
-    );
-
-    if (
-      DrawerRef.current.classList.contains(
-        visibleClass
-      )
-    ) {
-      DrawerRef.current.classList.remove(
-        visibleClass
-      );
-    } else {
-      DrawerRef.current.classList.add(
-        visibleClass
-      );
-    }
-  };
-
-  const handleHideDrawer = () => {
-    if (!DrawerRef.current) {
-      return;
-    }
-
-    DrawerRef.current.classList.remove(
+    DrawerRef.current.classList.toggle(
       css(styles.visible)
     );
   };
@@ -85,7 +61,7 @@ function Notifications({
           type="button"
           className="close-button absolute right-2 top-2 cursor-pointer border-0 bg-transparent"
           aria-label="Close"
-          onClick={handleHideDrawer}
+          onClick={handleToggleDrawer}
         >
           <img
             className="h-4 w-4"
@@ -127,18 +103,17 @@ function Notifications({
   );
 }
 
-export const styles =
-  StyleSheet.create({
-    drawer: {
-      opacity: 0,
-      visibility: 'hidden',
-    },
+export const styles = StyleSheet.create({
+  drawer: {
+    opacity: 0,
+    visibility: 'hidden',
+  },
 
-    visible: {
-      opacity: 1,
-      visibility: 'visible',
-    },
-  });
+  visible: {
+    opacity: 1,
+    visibility: 'visible',
+  },
+});
 
 Notifications.propTypes = {
   notifications: PropTypes.arrayOf(
