@@ -31,10 +31,7 @@ import {
 export default function App() {
   const dispatch = useDispatch();
 
-  const {
-    user,
-    isLoggedIn,
-  } = useSelector(
+  const { isLoggedIn } = useSelector(
     (state) => state.auth
   );
 
