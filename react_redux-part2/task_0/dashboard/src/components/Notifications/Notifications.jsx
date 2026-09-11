@@ -20,24 +20,34 @@ function Notifications({
   const DrawerRef = useRef(null);
 
   const handleToggleDrawer = () => {
-    if (DrawerRef.current) {
-      const visibleClass = css(
-        styles.visible
+    if (!DrawerRef.current) {
+      return;
+    }
+
+    const visibleStyle = css(
+      styles.visible
+    );
+
+    if (
+      DrawerRef.current.classList.contains(
+        'visible'
+      )
+    ) {
+      DrawerRef.current.classList.remove(
+        'visible'
       );
 
-      if (
-        DrawerRef.current.classList.contains(
-          visibleClass
-        )
-      ) {
-        DrawerRef.current.classList.remove(
-          visibleClass
-        );
-      } else {
-        DrawerRef.current.classList.add(
-          visibleClass
-        );
-      }
+      DrawerRef.current.classList.remove(
+        visibleStyle
+      );
+    } else {
+      DrawerRef.current.classList.add(
+        'visible'
+      );
+
+      DrawerRef.current.classList.add(
+        visibleStyle
+      );
     }
   };
 
@@ -51,23 +61,10 @@ function Notifications({
     }
   };
 
-  const titleClasses = [
-    'menuItem',
-    'notification-title',
-    'ml-auto',
-    'mr-5',
-    'mb-2',
-    'w-1/4',
-    'cursor-pointer',
-    'text-right',
-    'max-[912px]:mr-3',
-    'max-[912px]:w-full',
-  ];
-
   return (
     <>
       <div
-        className={titleClasses.join(' ')}
+        className="menuItem notification-title ml-auto mr-5 mb-2 w-1/4 cursor-pointer text-right max-[912px]:mr-3 max-[912px]:w-full"
         role="button"
         tabIndex={0}
         onClick={handleToggleDrawer}
@@ -111,7 +108,9 @@ function Notifications({
                   <NotificationItem
                     key={notification.id}
                     id={notification.id}
-                    type={notification.type}
+                    type={
+                      notification.type
+                    }
                     value={
                       notification.value
                     }
