@@ -24,31 +24,33 @@ function Notifications({
       return;
     }
 
-    const visibleStyle = css(
+    const visibleClass = css(
       styles.visible
     );
 
     if (
       DrawerRef.current.classList.contains(
-        'visible'
+        visibleClass
       )
     ) {
       DrawerRef.current.classList.remove(
-        'visible'
-      );
-
-      DrawerRef.current.classList.remove(
-        visibleStyle
+        visibleClass
       );
     } else {
       DrawerRef.current.classList.add(
-        'visible'
-      );
-
-      DrawerRef.current.classList.add(
-        visibleStyle
+        visibleClass
       );
     }
+  };
+
+  const handleHideDrawer = () => {
+    if (!DrawerRef.current) {
+      return;
+    }
+
+    DrawerRef.current.classList.remove(
+      css(styles.visible)
+    );
   };
 
   const handleTitleKeyDown = (event) => {
@@ -83,7 +85,7 @@ function Notifications({
           type="button"
           className="close-button absolute right-2 top-2 cursor-pointer border-0 bg-transparent"
           aria-label="Close"
-          onClick={handleToggleDrawer}
+          onClick={handleHideDrawer}
         >
           <img
             className="h-4 w-4"
@@ -108,15 +110,9 @@ function Notifications({
                   <NotificationItem
                     key={notification.id}
                     id={notification.id}
-                    type={
-                      notification.type
-                    }
-                    value={
-                      notification.value
-                    }
-                    html={
-                      notification.html
-                    }
+                    type={notification.type}
+                    value={notification.value}
+                    html={notification.html}
                     markAsRead={
                       markNotificationAsRead
                     }
