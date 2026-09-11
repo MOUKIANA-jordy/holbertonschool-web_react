@@ -1,5 +1,14 @@
 import React, { Component } from 'react';
 
+/**
+ * Higher-order component that logs the lifecycle of the wrapped component.
+ *
+ * @param {React.ComponentType} WrappedComponent
+ * The component whose mount and unmount events should be logged.
+ *
+ * @returns {React.ComponentType}
+ * A component enhanced with lifecycle logging.
+ */
 function WithLogging(WrappedComponent) {
   const componentName =
     WrappedComponent.displayName ||
@@ -31,4 +40,3 @@ function WithLogging(WrappedComponent) {
 }
 
 export default WithLogging;
-
