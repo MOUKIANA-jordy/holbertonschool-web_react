@@ -56,7 +56,7 @@ describe('Notifications component', () => {
     );
   });
 
-  test('displays the drawer when notification title is clicked', async () => {
+  test('adds visible class when notification title is clicked', async () => {
     const user = userEvent.setup();
 
     const { container } = render(
@@ -75,7 +75,34 @@ describe('Notifications component', () => {
     );
   });
 
-  test('displays the drawer with Enter key', () => {
+  test('removes visible class when notification title is clicked twice', async () => {
+    const user = userEvent.setup();
+
+    const { container } = render(
+      <Notifications notifications={notifications} />
+    );
+
+    const drawer =
+      container.querySelector('.Notifications');
+
+    const title = screen.getByText(
+      'Your notifications'
+    );
+
+    await user.click(title);
+
+    expect(drawer).toHaveClass(
+      css(styles.visible)
+    );
+
+    await user.click(title);
+
+    expect(drawer).not.toHaveClass(
+      css(styles.visible)
+    );
+  });
+
+  test('toggles the drawer with Enter key', () => {
     const { container } = render(
       <Notifications notifications={notifications} />
     );
@@ -94,9 +121,17 @@ describe('Notifications component', () => {
     expect(drawer).toHaveClass(
       css(styles.visible)
     );
+
+    fireEvent.keyDown(title, {
+      key: 'Enter',
+    });
+
+    expect(drawer).not.toHaveClass(
+      css(styles.visible)
+    );
   });
 
-  test('displays the drawer with Space key', () => {
+  test('toggles the drawer with Space key', () => {
     const { container } = render(
       <Notifications notifications={notifications} />
     );
@@ -115,9 +150,17 @@ describe('Notifications component', () => {
     expect(drawer).toHaveClass(
       css(styles.visible)
     );
+
+    fireEvent.keyDown(title, {
+      key: ' ',
+    });
+
+    expect(drawer).not.toHaveClass(
+      css(styles.visible)
+    );
   });
 
-  test('close button hides the drawer', async () => {
+  test('close button removes visible class', async () => {
     const user = userEvent.setup();
 
     const { container } = render(

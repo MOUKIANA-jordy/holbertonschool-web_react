@@ -13,22 +13,6 @@ function Notifications({
 }) {
   const DrawerRef = useRef(null);
 
-  const handleDisplayDrawer = () => {
-    if (DrawerRef.current) {
-      DrawerRef.current.classList.add(
-        css(styles.visible)
-      );
-    }
-  };
-
-  const handleHideDrawer = () => {
-    if (DrawerRef.current) {
-      DrawerRef.current.classList.remove(
-        css(styles.visible)
-      );
-    }
-  };
-
   const handleToggleDrawer = () => {
     if (!DrawerRef.current) {
       return;
@@ -41,9 +25,13 @@ function Notifications({
         visibleClass
       )
     ) {
-      handleHideDrawer();
+      DrawerRef.current.classList.remove(
+        visibleClass
+      );
     } else {
-      handleDisplayDrawer();
+      DrawerRef.current.classList.add(
+        visibleClass
+      );
     }
   };
 
@@ -63,7 +51,7 @@ function Notifications({
         className="menuItem notification-title ml-auto mr-5 mb-2 w-1/4 cursor-pointer text-right max-[912px]:mr-3 max-[912px]:w-full"
         role="button"
         tabIndex={0}
-        onClick={handleDisplayDrawer}
+        onClick={handleToggleDrawer}
         onKeyDown={handleTitleKeyDown}
       >
         Your notifications
@@ -79,7 +67,7 @@ function Notifications({
           type="button"
           className="close-button absolute right-2 top-2 cursor-pointer border-0 bg-transparent"
           aria-label="Close"
-          onClick={handleHideDrawer}
+          onClick={handleToggleDrawer}
         >
           <img
             className="h-4 w-4"
