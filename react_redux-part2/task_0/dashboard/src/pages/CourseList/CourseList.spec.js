@@ -41,7 +41,6 @@ function renderWithStore(courses = []) {
       },
       notifications: {
         notifications: [],
-        displayDrawer: true,
       },
       courses: {
         courses,
