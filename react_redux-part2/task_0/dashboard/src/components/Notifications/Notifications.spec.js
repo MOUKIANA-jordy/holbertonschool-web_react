@@ -75,34 +75,7 @@ describe('Notifications component', () => {
     );
   });
 
-  test('hides the drawer when title is clicked twice', async () => {
-    const user = userEvent.setup();
-
-    const { container } = render(
-      <Notifications notifications={notifications} />
-    );
-
-    const drawer =
-      container.querySelector('.Notifications');
-
-    const title = screen.getByText(
-      'Your notifications'
-    );
-
-    await user.click(title);
-
-    expect(drawer).toHaveClass(
-      css(styles.visible)
-    );
-
-    await user.click(title);
-
-    expect(drawer).not.toHaveClass(
-      css(styles.visible)
-    );
-  });
-
-  test('toggles the drawer with Enter key', () => {
+  test('displays the drawer with Enter key', () => {
     const { container } = render(
       <Notifications notifications={notifications} />
     );
@@ -121,17 +94,9 @@ describe('Notifications component', () => {
     expect(drawer).toHaveClass(
       css(styles.visible)
     );
-
-    fireEvent.keyDown(title, {
-      key: 'Enter',
-    });
-
-    expect(drawer).not.toHaveClass(
-      css(styles.visible)
-    );
   });
 
-  test('toggles the drawer with Space key', () => {
+  test('displays the drawer with Space key', () => {
     const { container } = render(
       <Notifications notifications={notifications} />
     );
