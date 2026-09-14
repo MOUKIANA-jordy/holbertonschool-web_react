@@ -18,19 +18,25 @@ function Notifications({
       return;
     }
 
-    const visibleClass = css(styles.visible);
+    const visibleAphroditeClass = css(styles.visible);
 
     if (
-      DrawerRef.current.classList.contains(
-        visibleClass
-      )
+      DrawerRef.current.classList.contains('visible')
     ) {
       DrawerRef.current.classList.remove(
-        visibleClass
+        'visible'
+      );
+
+      DrawerRef.current.classList.remove(
+        visibleAphroditeClass
       );
     } else {
       DrawerRef.current.classList.add(
-        visibleClass
+        'visible'
+      );
+
+      DrawerRef.current.classList.add(
+        visibleAphroditeClass
       );
     }
   };

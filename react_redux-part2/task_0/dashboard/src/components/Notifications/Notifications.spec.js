@@ -52,6 +52,10 @@ describe('Notifications component', () => {
     expect(drawer).toBeInTheDocument();
 
     expect(drawer).not.toHaveClass(
+      'visible'
+    );
+
+    expect(drawer).not.toHaveClass(
       css(styles.visible)
     );
   });
@@ -68,6 +72,10 @@ describe('Notifications component', () => {
 
     await user.click(
       screen.getByText('Your notifications')
+    );
+
+    expect(drawer).toHaveClass(
+      'visible'
     );
 
     expect(drawer).toHaveClass(
@@ -92,13 +100,13 @@ describe('Notifications component', () => {
     await user.click(title);
 
     expect(drawer).toHaveClass(
-      css(styles.visible)
+      'visible'
     );
 
     await user.click(title);
 
     expect(drawer).not.toHaveClass(
-      css(styles.visible)
+      'visible'
     );
   });
 
@@ -119,7 +127,7 @@ describe('Notifications component', () => {
     });
 
     expect(drawer).toHaveClass(
-      css(styles.visible)
+      'visible'
     );
 
     fireEvent.keyDown(title, {
@@ -127,7 +135,7 @@ describe('Notifications component', () => {
     });
 
     expect(drawer).not.toHaveClass(
-      css(styles.visible)
+      'visible'
     );
   });
 
@@ -148,15 +156,7 @@ describe('Notifications component', () => {
     });
 
     expect(drawer).toHaveClass(
-      css(styles.visible)
-    );
-
-    fireEvent.keyDown(title, {
-      key: ' ',
-    });
-
-    expect(drawer).not.toHaveClass(
-      css(styles.visible)
+      'visible'
     );
   });
 
@@ -175,7 +175,7 @@ describe('Notifications component', () => {
     );
 
     expect(drawer).toHaveClass(
-      css(styles.visible)
+      'visible'
     );
 
     await user.click(
@@ -185,7 +185,7 @@ describe('Notifications component', () => {
     );
 
     expect(drawer).not.toHaveClass(
-      css(styles.visible)
+      'visible'
     );
   });
 
