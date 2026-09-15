@@ -52,15 +52,11 @@ describe('Notifications component', () => {
     expect(drawer).toBeInTheDocument();
 
     expect(drawer).not.toHaveClass(
-      'visible'
-    );
-
-    expect(drawer).not.toHaveClass(
       css(styles.visible)
     );
   });
 
-  test('adds visible class when notification title is clicked', async () => {
+  test('adds visible style when notification title is clicked', async () => {
     const user = userEvent.setup();
 
     const { container } = render(
@@ -75,15 +71,11 @@ describe('Notifications component', () => {
     );
 
     expect(drawer).toHaveClass(
-      'visible'
-    );
-
-    expect(drawer).toHaveClass(
       css(styles.visible)
     );
   });
 
-  test('removes visible class when notification title is clicked twice', async () => {
+  test('removes visible style when notification title is clicked twice', async () => {
     const user = userEvent.setup();
 
     const { container } = render(
@@ -100,17 +92,17 @@ describe('Notifications component', () => {
     await user.click(title);
 
     expect(drawer).toHaveClass(
-      'visible'
+      css(styles.visible)
     );
 
     await user.click(title);
 
     expect(drawer).not.toHaveClass(
-      'visible'
+      css(styles.visible)
     );
   });
 
-  test('toggles the drawer with Enter key', () => {
+  test('toggles drawer with Enter key', () => {
     const { container } = render(
       <Notifications notifications={notifications} />
     );
@@ -127,7 +119,7 @@ describe('Notifications component', () => {
     });
 
     expect(drawer).toHaveClass(
-      'visible'
+      css(styles.visible)
     );
 
     fireEvent.keyDown(title, {
@@ -135,11 +127,11 @@ describe('Notifications component', () => {
     });
 
     expect(drawer).not.toHaveClass(
-      'visible'
+      css(styles.visible)
     );
   });
 
-  test('toggles the drawer with Space key', () => {
+  test('toggles drawer with Space key', () => {
     const { container } = render(
       <Notifications notifications={notifications} />
     );
@@ -156,11 +148,11 @@ describe('Notifications component', () => {
     });
 
     expect(drawer).toHaveClass(
-      'visible'
+      css(styles.visible)
     );
   });
 
-  test('close button removes visible class', async () => {
+  test('close button hides the drawer', async () => {
     const user = userEvent.setup();
 
     const { container } = render(
@@ -175,7 +167,7 @@ describe('Notifications component', () => {
     );
 
     expect(drawer).toHaveClass(
-      'visible'
+      css(styles.visible)
     );
 
     await user.click(
@@ -185,7 +177,7 @@ describe('Notifications component', () => {
     );
 
     expect(drawer).not.toHaveClass(
-      'visible'
+      css(styles.visible)
     );
   });
 
@@ -201,7 +193,7 @@ describe('Notifications component', () => {
     ).toHaveLength(3);
   });
 
-  test('displays the empty notification message', () => {
+  test('displays empty notification message', () => {
     render(
       <Notifications notifications={[]} />
     );
@@ -213,7 +205,7 @@ describe('Notifications component', () => {
     ).toBeInTheDocument();
   });
 
-  test('calls markNotificationAsRead with the notification id', async () => {
+  test('calls markNotificationAsRead with notification id', async () => {
     const user = userEvent.setup();
 
     const markNotificationAsRead =

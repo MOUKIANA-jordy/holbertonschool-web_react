@@ -14,29 +14,9 @@ function Notifications({
   const DrawerRef = useRef(null);
 
   const handleToggleDrawer = () => {
-    if (!DrawerRef.current) {
-      return;
-    }
-
-    const visibleAphroditeClass = css(styles.visible);
-
-    if (
-      DrawerRef.current.classList.contains('visible')
-    ) {
-      DrawerRef.current.classList.remove(
-        'visible'
-      );
-
-      DrawerRef.current.classList.remove(
-        visibleAphroditeClass
-      );
-    } else {
-      DrawerRef.current.classList.add(
-        'visible'
-      );
-
-      DrawerRef.current.classList.add(
-        visibleAphroditeClass
+    if (DrawerRef.current) {
+      DrawerRef.current.classList.toggle(
+        css(styles.visible)
       );
     }
   };
