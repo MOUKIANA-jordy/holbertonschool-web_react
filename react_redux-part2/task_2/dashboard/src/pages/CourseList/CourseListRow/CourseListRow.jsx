@@ -5,8 +5,8 @@ function CourseListRow({
   isHeader = false,
   textFirstCell = '',
   textSecondCell = null,
-  id = '',
-  isChecked = false,
+  id = null,
+  isSelected = false,
   changeRow = () => {},
 }) {
   const rowClasses = isHeader
@@ -46,20 +46,18 @@ function CourseListRow({
     );
   }
 
-  const handleChange = (event) => {
-    changeRow(
-      id,
-      event.target.checked
-    );
-  };
-
   return (
     <tr className={rowClasses}>
       <td className={dataCellClasses}>
         <input
           type="checkbox"
-          checked={isChecked}
-          onChange={handleChange}
+          checked={isSelected}
+          onChange={(event) =>
+            changeRow(
+              id,
+              event.target.checked
+            )
+          }
         />
 
         <span className="ml-2">
@@ -92,7 +90,7 @@ CourseListRow.propTypes = {
     PropTypes.number,
   ]),
 
-  isChecked: PropTypes.bool,
+  isSelected: PropTypes.bool,
 
   changeRow: PropTypes.func,
 };

@@ -3,6 +3,7 @@ import {
   createSlice,
 } from '@reduxjs/toolkit';
 import axios from 'axios';
+
 import { logout } from '../auth/authSlice';
 
 const API_BASE_URL = 'http://localhost:5173';
@@ -28,6 +29,7 @@ export const fetchCourses = createAsyncThunk(
 
 const coursesSlice = createSlice({
   name: 'courses',
+
   initialState,
 
   reducers: {
@@ -65,7 +67,10 @@ const coursesSlice = createSlice({
           );
         }
       )
-      .addCase(logout, () => initialState);
+
+      .addCase(logout, (state) => {
+        state.courses = [];
+      });
   },
 });
 

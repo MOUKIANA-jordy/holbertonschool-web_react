@@ -73,7 +73,7 @@ function CourseList() {
               id={course.id}
               textFirstCell={course.name}
               textSecondCell={course.credit}
-              isChecked={course.isSelected}
+              isSelected={course.isSelected}
               changeRow={onChangeRow}
             />
           ))}
@@ -86,8 +86,6 @@ function CourseList() {
 const CourseListWithLogging =
   WithLogging(CourseList);
 
-export {
-  CourseList,
-};
+export { CourseList };
 
 export default CourseListWithLogging;
