@@ -1,7 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
 import { memo, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
@@ -13,13 +12,10 @@ import NotificationItem from '../NotificationItem/NotificationItem';
 
 function Notifications({
   notifications = [],
+  loading = false,
   markNotificationAsRead = () => {},
 }) {
   const DrawerRef = useRef(null);
-
-  const loading = useSelector(
-    (state) => state.notifications.loading
-  );
 
   const handleToggleDrawer = () => {
     if (DrawerRef.current) {
@@ -126,6 +122,7 @@ Notifications.propTypes = {
       }),
     })
   ),
+  loading: PropTypes.bool,
   markNotificationAsRead: PropTypes.func,
 };
 
@@ -136,6 +133,8 @@ function areNotificationsPropsEqual(
   return (
     previousProps.notifications ===
       nextProps.notifications &&
+    previousProps.loading ===
+      nextProps.loading &&
     previousProps.markNotificationAsRead ===
       nextProps.markNotificationAsRead
   );

@@ -40,6 +40,10 @@ export default function App() {
       state.notifications.notifications
   );
 
+  const loading = useSelector(
+    (state) => state.notifications.loading
+  );
+
   useEffect(() => {
     dispatch(fetchNotifications());
   }, [dispatch]);
@@ -77,6 +81,7 @@ export default function App() {
       <div className="root-notifications relative w-full">
         <Notifications
           notifications={notifications}
+          loading={loading}
           markNotificationAsRead={
             handleMarkNotificationAsRead
           }

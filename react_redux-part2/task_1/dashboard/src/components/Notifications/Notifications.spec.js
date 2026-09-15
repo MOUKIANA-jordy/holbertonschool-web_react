@@ -4,16 +4,12 @@ import {
   screen,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
 import { css } from 'aphrodite';
 
 import Notifications, {
   areNotificationsPropsEqual,
   styles,
 } from './Notifications';
-
-import notificationsReducer from '../../features/notifications/notificationsSlice';
 
 const notifications = [
   {
@@ -30,43 +26,15 @@ const notifications = [
     id: 3,
     type: 'urgent',
     html: {
-      __html: '<strong>Urgent requirement</strong>',
+      __html:
+        '<strong>Urgent requirement</strong>',
     },
   },
 ];
 
-function renderWithStore(
-  component,
-  {
-    loading = false,
-    notificationList = [],
-  } = {}
-) {
-  const store = configureStore({
-    reducer: {
-      notifications: notificationsReducer,
-    },
-    preloadedState: {
-      notifications: {
-        notifications: notificationList,
-        loading,
-      },
-    },
-  });
-
-  return {
-    store,
-    ...render(
-      <Provider store={store}>
-        {component}
-      </Provider>
-    ),
-  };
-}
-
 describe('Notifications component', () => {
   test('renders the notification title', () => {
-    renderWithStore(<Notifications />);
+    render(<Notifications />);
 
     expect(
       screen.getByText('Your notifications')
@@ -74,8 +42,11 @@ describe('Notifications component', () => {
   });
 
   test('drawer is hidden by default', () => {
-    const { container } = renderWithStore(
-      <Notifications notifications={notifications} />
+    const { container } = render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
     );
 
     const drawer =
@@ -91,8 +62,11 @@ describe('Notifications component', () => {
   test('displays the drawer when notification title is clicked', async () => {
     const user = userEvent.setup();
 
-    const { container } = renderWithStore(
-      <Notifications notifications={notifications} />
+    const { container } = render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
     );
 
     const drawer =
@@ -110,8 +84,11 @@ describe('Notifications component', () => {
   test('hides the drawer when title is clicked twice', async () => {
     const user = userEvent.setup();
 
-    const { container } = renderWithStore(
-      <Notifications notifications={notifications} />
+    const { container } = render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
     );
 
     const drawer =
@@ -135,8 +112,11 @@ describe('Notifications component', () => {
   });
 
   test('toggles the drawer with Enter key', () => {
-    const { container } = renderWithStore(
-      <Notifications notifications={notifications} />
+    const { container } = render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
     );
 
     const drawer =
@@ -164,8 +144,11 @@ describe('Notifications component', () => {
   });
 
   test('toggles the drawer with Space key', () => {
-    const { container } = renderWithStore(
-      <Notifications notifications={notifications} />
+    const { container } = render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
     );
 
     const drawer =
@@ -187,8 +170,11 @@ describe('Notifications component', () => {
   test('close button hides the drawer', async () => {
     const user = userEvent.setup();
 
-    const { container } = renderWithStore(
-      <Notifications notifications={notifications} />
+    const { container } = render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
     );
 
     const drawer =
@@ -213,9 +199,12 @@ describe('Notifications component', () => {
     );
   });
 
-  test('renders all notification items', () => {
-    const { container } = renderWithStore(
-      <Notifications notifications={notifications} />
+  test('renders all notification items when loading is false', () => {
+    const { container } = render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
     );
 
     expect(
@@ -225,9 +214,12 @@ describe('Notifications component', () => {
     ).toHaveLength(3);
   });
 
-  test('displays the empty notification message', () => {
-    renderWithStore(
-      <Notifications notifications={[]} />
+  test('displays the empty notification message when loading is false', () => {
+    render(
+      <Notifications
+        notifications={[]}
+        loading={false}
+      />
     );
 
     expect(
@@ -237,14 +229,85 @@ describe('Notifications component', () => {
     ).toBeInTheDocument();
   });
 
+  test('displays Loading... when loading is true', () => {
+    render(
+      <Notifications
+        notifications={notifications}
+        loading={true}
+      />
+    );
+
+    expect(
+      screen.getByText('Loading...')
+    ).toBeInTheDocument();
+
+    expect(
+      screen.queryByText(
+        'Here is the list of notifications'
+      )
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.queryByText(
+        'New course available'
+      )
+    ).not.toBeInTheDocument();
+  });
+
+  test('does not display Loading... when loading is false', () => {
+    render(
+      <Notifications
+        notifications={notifications}
+        loading={false}
+      />
+    );
+
+    expect(
+      screen.queryByText('Loading...')
+    ).not.toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        'Here is the list of notifications'
+      )
+    ).toBeInTheDocument();
+
+    expect(
+      screen.getByText(
+        'New course available'
+      )
+    ).toBeInTheDocument();
+  });
+
+  test('does not display empty message while loading', () => {
+    render(
+      <Notifications
+        notifications={[]}
+        loading={true}
+      />
+    );
+
+    expect(
+      screen.getByText('Loading...')
+    ).toBeInTheDocument();
+
+    expect(
+      screen.queryByText(
+        'No new notification for now'
+      )
+    ).not.toBeInTheDocument();
+  });
+
   test('calls markNotificationAsRead with the notification id', async () => {
     const user = userEvent.setup();
 
-    const markNotificationAsRead = jest.fn();
+    const markNotificationAsRead =
+      jest.fn();
 
-    renderWithStore(
+    render(
       <Notifications
         notifications={notifications}
+        loading={false}
         markNotificationAsRead={
           markNotificationAsRead
         }
@@ -262,50 +325,14 @@ describe('Notifications component', () => {
     ).toHaveBeenCalledWith(1);
   });
 
-  test('displays Loading... when loading is true', () => {
-    renderWithStore(
-      <Notifications notifications={notifications} />,
-      {
-        loading: true,
-        notificationList: notifications,
-      }
-    );
-
-    expect(
-      screen.getByText('Loading...')
-    ).toBeInTheDocument();
-
-    expect(
-      screen.queryByText(
-        'Here is the list of notifications'
-      )
-    ).not.toBeInTheDocument();
-  });
-
-  test('does not display Loading... when loading is false', () => {
-    renderWithStore(
-      <Notifications notifications={notifications} />,
-      {
-        loading: false,
-        notificationList: notifications,
-      }
-    );
-
-    expect(
-      screen.queryByText('Loading...')
-    ).not.toBeInTheDocument();
-
-    expect(
-      screen.getByText(
-        'Here is the list of notifications'
-      )
-    ).toBeInTheDocument();
-  });
-
   test('memo comparison returns true when props are unchanged', () => {
+    const markNotificationAsRead =
+      jest.fn();
+
     const props = {
       notifications,
-      markNotificationAsRead: jest.fn(),
+      loading: false,
+      markNotificationAsRead,
     };
 
     expect(
@@ -316,18 +343,61 @@ describe('Notifications component', () => {
     ).toBe(true);
   });
 
-  test('memo comparison returns false when notifications change', () => {
-    const markNotificationAsRead = jest.fn();
+  test('memo comparison returns true when all props have the same references and values', () => {
+    const markNotificationAsRead =
+      jest.fn();
 
     expect(
       areNotificationsPropsEqual(
         {
           notifications,
+          loading: false,
+          markNotificationAsRead,
+        },
+        {
+          notifications,
+          loading: false,
+          markNotificationAsRead,
+        }
+      )
+    ).toBe(true);
+  });
+
+  test('memo comparison returns false when notifications change', () => {
+    const markNotificationAsRead =
+      jest.fn();
+
+    expect(
+      areNotificationsPropsEqual(
+        {
+          notifications,
+          loading: false,
           markNotificationAsRead,
         },
         {
           notifications:
             notifications.slice(1),
+          loading: false,
+          markNotificationAsRead,
+        }
+      )
+    ).toBe(false);
+  });
+
+  test('memo comparison returns false when loading changes', () => {
+    const markNotificationAsRead =
+      jest.fn();
+
+    expect(
+      areNotificationsPropsEqual(
+        {
+          notifications,
+          loading: false,
+          markNotificationAsRead,
+        },
+        {
+          notifications,
+          loading: true,
           markNotificationAsRead,
         }
       )
@@ -339,11 +409,13 @@ describe('Notifications component', () => {
       areNotificationsPropsEqual(
         {
           notifications,
+          loading: false,
           markNotificationAsRead:
             jest.fn(),
         },
         {
           notifications,
+          loading: false,
           markNotificationAsRead:
             jest.fn(),
         }
